@@ -20,26 +20,4 @@ void setup() {
 
 void loop() {
 
-    // Reagir seulement au moment ou le bumper est enfonce (pas tant qu'il reste enfonce)
-
-    if (isWistleBlown() || ROBUS_IsBumper(3)) {
-        if (paused) {
-            NavigationInit();
-            paused = false;
-        } else {
-            paused = true;
-        }
-    }
-
-    if (paused) {
-        return;
-    }
-
-    if (hasReachedEnd()) {
-        reverseAllMovesInHistory();
-        paused = true;
-        return;
-    }
-
-    moveFromPosRobot(getPosition().column);
 }
