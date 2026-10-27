@@ -1,11 +1,10 @@
-#ifndef MECANISME
-#define MECANISME
+#ifndef MECANISME_H
+#define MECANISME_H
 
 #include "config.h"
 
-// Debut: Constantes et Fonctions disponibles aux autres ici
-
-
-// Fin
+// Fonctions publiques
+void MecanismeInit();
+void ComprehensionServo();
 
 #endif
