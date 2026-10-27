@@ -7,11 +7,8 @@ Dépôt officiel du robot autonome pour la compétition **"Le rectangle"**. Le r
 ## 📂 Structure du Projet
 
 ```text
-projet_robot/
+robus_combattant/
 ├── platformio.ini                   # Configuration PlatformIO (Carte Arduino Mega / Robot)
-├── include/                         # Fichiers d'en-tête globaux
-├── lib/                             # Bibliothèques externes (ex: LibRobus)
-├── test/                            # Tests unitaires
 └── src/
     ├── main.cpp                     # Point d'entrée principal (Naguy - Pilotage global)
     │
