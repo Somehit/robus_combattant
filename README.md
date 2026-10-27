@@ -1,164 +1,115 @@
-# Fonctions disponibles
+# Robus Combattant
 
-Liste des fonctions publiques declarees dans les fichiers `.h` du projet.
-
-## Sommaire
-
-| Module | Fichier | Fonctions |
-|---|---|---|
-| Config | `src/config.h` | `leftOf`, `rightOf` |
-| Infrarouge | `src/infrared/infrared.h` | `InfraredInit`, `isObstacle` |
-| Moteurs | `src/motor/motor.h` | `MotorsInit`, `moveForward`, `rotate` |
-| Matrice | `src/pathfinding/maze/maze.h` | `generateInitMaze`, `blockWall`, `openWall`, `getWall` |
-| Navigation | `src/pathfinding/navigation/navigation.h` | `NavigationInit`, `getPosition`, `getMaze`, `hasReachedEnd`, `moveForwardOneSquare`, `turnLeft`, `turnRight`, `scanFront`, `scanPaths`, `getOpenDirections`, `moveToNextSquare` |
-
-## Types utiles
-
-| Type | Fichier | Valeurs / champs |
-|---|---|---|
-| `Orientation` | `config.h` | `NORTH`, `EAST`, `SOUTH`, `WEST` |
-| `CurrentPosition` | `config.h` | `row`, `column`, `direction` |
-| `RotationDirection` | `motor.h` | `ROTATE_LEFT`, `ROTATE_RIGHT` |
-| `PassageState` | `maze.h` | `UNDETERMINED`, `OPEN`, `BLOCKED` |
-| `Square` | `maze.h` | `up`, `down`, `left`, `right` |
-| `Maze` | `maze.h` | `squares[ROWS][COLUMNS]` |
+Dépôt officiel du robot autonome pour la compétition **"Le rectangle"**. Le robot doit accomplir un parcours de suivi de ligne, détecter des couleurs, manipuler des objets (verre, quille) et franchir des obstacles en moins de 2 minutes.
 
 ---
 
-## Config — `src/config.h`
+## 📂 Structure du Projet
 
-### `Orientation leftOf(Orientation direction)`
-Calcule l'orientation obtenue apres un quart de tour a gauche.
-- **@param** `direction` : orientation de depart
-- **@return** orientation a gauche de la direction donnee
-
-### `Orientation rightOf(Orientation direction)`
-Calcule l'orientation obtenue apres un quart de tour a droite.
-- **@param** `direction` : orientation de depart
-- **@return** orientation a droite de la direction donnee
-
----
-
-## Infrarouge — `src/infrared/infrared.h`
-
-### `void InfraredInit()`
-Configure les broches des capteurs infrarouges vert et rouge en entree.
-
-### `bool isObstacle()`
-Lit les capteurs infrarouges pour detecter un obstacle devant le robot.
-- **@return** `true` si au moins un des deux capteurs detecte un obstacle
-
----
-
-## Moteurs — `src/motor/motor.h`
-
-### `void MotorsInit()`
-Remet les encodeurs a zero, arrete les moteurs et choisit les reglages (A ou B) selon la broche d'identification du robot.
-
-### `void moveForward(float distanceMeters)`
-Avance en ligne droite avec acceleration, correction PID et deceleration. Bloque jusqu'a ce que la distance soit parcourue.
-- **@param** `distanceMeters` : distance a parcourir en metres
-
-### `void rotate(RotationDirection direction)`
-Tourne le robot sur place d'un quart de tour. Bloque jusqu'a ce que la rotation soit terminee.
-- **@param** `direction` : sens de rotation (`ROTATE_LEFT` ou `ROTATE_RIGHT`)
-
-> `moveForward` et `rotate` ne mettent **pas** la position a jour. Pour se deplacer dans la matrice, utiliser `moveForwardOneSquare`, `turnLeft` et `turnRight` du module Navigation.
+```text
+projet_robot/
+├── platformio.ini                   # Configuration PlatformIO (Carte Arduino Mega / Robot)
+├── include/                         # Fichiers d'en-tête globaux
+├── lib/                             # Bibliothèques externes (ex: LibRobus)
+├── test/                            # Tests unitaires
+└── src/
+    ├── main.cpp                     # Point d'entrée principal (Naguy - Pilotage global)
+    │
+    ├── suivi_ligne/                 # 👤 Personne 2 : Charles
+    │   ├── suivi_ligne.h
+    │   └── suivi_ligne.cpp
+    │
+    ├── couleur_del/                 # 👤 Personne 3 : François
+    │   ├── couleur_del.h
+    │   └── couleur_del.cpp
+    │
+    ├── mecanisme/                   # 👤 Personne 4 : Jérémy
+    │   ├── mecanisme.h
+    │   └── mecanisme.cpp
+    │
+    ├── infrarouge/                  # 👤 Personne 5 : Naguy (Réception IR & Bips)
+    │   ├── ir_recepteur.h
+    │   └── ir_recepteur.cpp
+    │
+    └── obstacles/                   # 👤 Personne 5 : Naguy (Mur & Trou)
+        ├── obstacles.h
+        └── obstacles.cpp
+```
 
 ---
 
-## Matrice — `src/pathfinding/maze/maze.h`
+## 👥 Répartition des Tâches
 
-### `Maze generateInitMaze()`
-Cree la matrice de depart : tous les passages sont indetermines, sauf les murs lateraux connus des rangees impaires qui sont bloques.
-- **@return** matrice initialisee
-
-### `void blockWall(Maze& maze, const CurrentPosition& position)`
-Marque comme bloque le mur devant la position donnee, des deux cotes (case courante et case voisine).
-- **@param** `maze` : matrice a modifier
-- **@param** `position` : case et orientation qui designent le mur
-
-### `void openWall(Maze& maze, const CurrentPosition& position)`
-Marque comme ouvert le passage devant la position donnee, des deux cotes (case courante et case voisine).
-- **@param** `maze` : matrice a modifier
-- **@param** `position` : case et orientation qui designent le passage
-
-### `PassageState getWall(const Maze& maze, uint8_t row, uint8_t column, Orientation side)`
-Lit l'etat d'un mur d'une case. Les bords du parcours sont toujours bloques.
-- **@param** `maze` : matrice a consulter
-- **@param** `row` : rangee de la case
-- **@param** `column` : colonne de la case
-- **@param** `side` : cote de la case a lire
-- **@return** etat du passage (`UNDETERMINED`, `OPEN` ou `BLOCKED`)
+* **Naguy (Point d'entrée & Coordination)** : `main.cpp`, dossier `infrarouge/` (réception IR, bips de confirmation) et dossier `obstacles/` (mur, trou et intégration finale).
+* **Charles (Suivi de ligne)** : Dossier `suivi_ligne/` (lecture analogique OPB704 et asservissement).
+* **François (Couleurs & DELs)** : Dossier `couleur_del/` (détection des couleurs au sol et gestion des DELs pendant 10s).
+* **Jérémy (Mécanismes)** : Dossier `mecanisme/` (servomoteurs, bras, pince, verre et quille).
 
 ---
 
-## Navigation — `src/pathfinding/navigation/navigation.h`
+## 📐 Bonnes Pratiques de Code (.h et .cpp)
 
-Ce module garde la matrice et la position du robot. Constantes : `SQUARE_SIZE_METERS` (0.5 m), `OPEN_FORWARD` (`0b100`), `OPEN_LEFT` (`0b010`), `OPEN_RIGHT` (`0b001`).
+Pour que notre code reste propre, modulaire et facile à fusionner, nous devons respecter rigoureusement la séparation entre les fichiers d'en-tête (`.h`) et d'implémentation (`.cpp`).
 
-### `void NavigationInit()`
-Initialise la matrice et place le robot a sa position de depart (rangee 0, colonne 1, oriente vers le sud).
+### 1. Rôles des fichiers `.h` (Header)
+Le fichier `.h` sert d'interface publique pour le module. Il doit contenir **uniquement** :
+* **Les gardes d'inclusion** (`#ifndef`, `#define`, `#endif`) Cest deja fait pour tout les .h
+* **Les constantes globales** du module (broches GPIO, seuils de capteurs, timeouts, etc.).
+* **Uniquement les signatures (prototypes) des fonctions publiques** que les autres coéquipiers (ou le `main.cpp`) ont le droit d'appeler. Les fonctions utilitaires internes (fonctions "helpers" privées) **ne doivent pas** figurer dans le `.h`.
 
-### `CurrentPosition getPosition()`
-Donne la position actuelle du robot dans la matrice.
-- **@return** copie de la position (rangee, colonne, orientation)
+**Exemple (`suivi_ligne.h`) :**
+```cpp
+#ifndef SUIVI_LIGNE_H
+#define SUIVI_LIGNE_H
 
-### `const Maze& getMaze()`
-Donne acces a la matrice construite pendant le parcours.
-- **@return** reference constante vers la matrice
+#include <config.h>
 
-### `bool hasReachedEnd()`
-Verifie si le robot est arrive sur la derniere rangee.
-- **@return** `true` si le robot est sur la derniere rangee
+// --- CONSTANTES DU MODULE ---
+const uint8_t PIN_CAPTEUR_GAUCHE = A0;
+const uint8_t PIN_CAPTEUR_CENTRE = A1;
+const uint8_t PIN_CAPTEUR_DROITE = A2;
+const int SEUIL_NOIR = 600;
 
-### `void moveForwardOneSquare()`
-Avance d'une case dans la direction actuelle et met la position a jour.
+// --- SIGNATURES PUBLIQUES ---
+/**
+ * @brief Initialise les broches et la configuration du suiveur de ligne.
+ */
+void initialiserSuiviLigne();
 
-### `void turnLeft()`
-Tourne d'un quart de tour a gauche et met l'orientation a jour.
+/**
+ * @brief Exécute la logique d'asservissement pour suivre la ligne anti-horaire.
+ */
+void executerSuiviLigne();
 
-### `void turnRight()`
-Tourne d'un quart de tour a droite et met l'orientation a jour.
+#endif
+```
 
-### `bool scanFront()`
-Lit le capteur infrarouge et met a jour le mur devant le robot dans la matrice.
-- **@return** `true` si un obstacle est detecte devant le robot
+### 2. Rôles des fichiers `.cpp` (Implémentation)
+Le fichier `.cpp` contient le code source réel (la logique) des fonctions déclarées dans le `.h`.
+* Il doit inclure son propre fichier `.h` (`#include "suivi_ligne.h"`).
+* C'est ici que l'on écrit les fonctions d'aide (helpers) privées qui n'ont pas besoin d'être exposées au reste de l'équipe.
 
-### `void scanPaths()`
-Scanne devant, a gauche et a droite pour mettre la matrice a jour. Ne tourne pas vers le nord ni vers un mur deja connu, et ne regarde pas les cotes si le sud est devant et ouvert. Le robot revient toujours a son orientation de depart.
-
-### `uint8_t getOpenDirections(const Maze& maze, const CurrentPosition& position)`
-Calcule les directions relatives au robot qui le rapprochent de la derniere rangee :
-- jamais vers le nord
-- si le sud est ouvert, seulement la direction qui mene au sud
-- sinon, seulement les cotes ou un passage vers le sud est encore possible
-
-- **@param** `maze` : matrice a consulter
-- **@param** `position` : position et orientation du robot
-- **@return** masque `0b[forward][left][right]` (`OPEN_FORWARD`, `OPEN_LEFT`, `OPEN_RIGHT`), `0` si le robot est sur la derniere rangee ou si le chemin est derriere lui
-
-### `void moveToNextSquare()`
-Choisit un chemin avec la matrice a jour et avance d'une case. Priorite : devant, puis gauche, puis droite.
-
----
-
-## Exemple d'utilisation
+### 3. Documentation des Fonctions (Format Doxygen)
+Chaque fonction publique doit être documentée au-dessus de sa signature dans le fichier `.h` à l'aide de commentaires au format Doxygen :
 
 ```cpp
-void setup() {
-    BoardInit();
-    MotorsInit();
-    InfraredInit();
-    NavigationInit();
-}
-
-void loop() {
-    if (hasReachedEnd()) {
-        return;
-    }
-
-    scanPaths();
-    moveToNextSquare();
-}
+/**
+ * @brief Brève description de ce que fait la fonction.
+ * 
+ * Description plus détaillée si nécessaire (comportement, contraintes temporelles, etc.).
+ * 
+ * @param param1 Description du premier paramètre d'entrée.
+ * @param param2 Description du deuxième paramètre.
+ * @return int   Description de la valeur de retour (ex: 0 pour succès, -1 si erreur).
+ */
+int maFonctionExemple(int param1, float param2);
 ```
+
+---
+
+## 🚀 Instructions de Compilation (PlatformIO)
+
+1. Ouvrir le dossier `projet_robot/` dans **VS Code**.
+2. S'assurer d'avoir installé l'extension **PlatformIO**.
+3. Compiler le projet en cliquant sur l'icône de coche (`✔ Build`) dans la barre inférieure.
+4. Connecter la carte Arduino Mega du robot et téléverser le code via l'icône de flèche (`➡ Upload`).

@@ -2,16 +2,12 @@
 #define MOTOR_H
 
 #include <config.h>
-#include <infrared/infrared.h>
 
 struct MotorSettings {
     float pidKp;
     float pidKi;
-    // Impulsions de la roue gauche voulues pour chaque impulsion de la roue droite
-    // > 1.0 si le robot derive a gauche, < 1.0 s'il derive a droite
     float wheelCountRatio;
     float maxPidCorrection;
-    // Gains separes pour la rotation sur place
     float rotationPidKp;
     float rotationPidKi;
     float rotationMaxPidCorrection;

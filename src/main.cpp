@@ -1,21 +1,17 @@
-#include <config.h>
-#include <motor/motor.h>
-#include <infrared/infrared.h>
-#include <pathfinding/navigation/navigation.h>
-#include <wistle/wistle.h>
+#include "config.h"
 
-bool paused;
+#include "motor/motor.h"
+#include "couleur_del/couleur_del.h"
+#include "infrarouge/infrarouge.h"
+#include "mecanisme/mecanisme.h"
+#include "obstacles/obstacles.h"
+#include "suivi_ligne/suivi_ligne.h"
 
 void setup() {
-    Wire.begin();
-    Wire.setWireTimeout(500, true);
+    Serial.begin(115200);
 
     BoardInit();
     MotorsInit();
-    InfraredInit();
-    NavigationInit();
-    WistleInit();
-    paused = true;
 }
 
 void loop() {
