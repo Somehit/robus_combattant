@@ -7,13 +7,23 @@
 #include "obstacles/obstacles.h"
 #include "suivi_ligne/suivi_ligne.h"
 
-void setup() {
+
+
+
+
+void setup() 
+{
     Serial.begin(115200);
 
     BoardInit();
     MotorsInit();
+    SUIVI_LIGNE_Initialisation();
+
 }
 
-void loop() {
+void loop()
+ {
+SUIVI_LIGNE_Execution();
+
 
 }

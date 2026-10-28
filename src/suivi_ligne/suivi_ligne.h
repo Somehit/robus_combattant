@@ -3,9 +3,14 @@
 
 #include "config.h"
 
-// Debut: Constantes et Fonctions disponibles aux autres ici
+// --- CONSTANTES DU MODULE ---
+const uint8_t PIN_CAPTEUR_GAUCHE = A2; //U3
+const uint8_t PIN_CAPTEUR_CENTRE = A1; //U2
+const uint8_t PIN_CAPTEUR_DROITE = A0; //U1
+const int SEUIL_NOIR = 250;
+const int SEUIL_MINOIR = 100;
+void SUIVI_LIGNE_Initialisation();
+void SUIVI_LIGNE_Execution();
 
-
-// Fin
 
 #endif
