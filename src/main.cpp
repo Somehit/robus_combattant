@@ -7,10 +7,6 @@
 #include "obstacles/obstacles.h"
 #include "suivi_ligne/suivi_ligne.h"
 
-
-
-
-
 void setup() 
 {
     Serial.begin(115200);
@@ -23,7 +19,7 @@ void setup()
 
 void loop()
  {
-SUIVI_LIGNE_Execution();
+
 
 
 }
