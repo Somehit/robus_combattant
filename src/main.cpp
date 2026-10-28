@@ -8,12 +8,17 @@
 #include "suivi_ligne/suivi_ligne.h"
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(9600);
 
     BoardInit();
     MotorsInit();
+
+    if (!InitialiserCouleurDel()) {
+        Serial.println("Erreur : capteur de couleur non detecte.");
+    }
 }
 
 void loop() {
+    ActualiserCouleurDel();
 
 }
