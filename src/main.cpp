@@ -1,7 +1,5 @@
 #include "config.h"
 
-#include <LibRobus.h>
-
 #include "motor/motor.h"
 #include "couleur_del/couleur_del.h"
 #include "infrarouge/infrarouge.h"
@@ -15,10 +13,16 @@ void setup()
 
     BoardInit();
 
+    MotorsInit();
     MecanismeInit();
+    SUIVI_LIGNE_Initialisation();
+
+    // Ajouter ici les autres fonctions d'initialisation
+    // lorsqu'elles seront disponibles
 }
 
 void loop()
 {
-    ComprehensionServo();
+    
 }
+
