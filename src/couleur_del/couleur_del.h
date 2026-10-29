@@ -3,9 +3,13 @@
 
 #include "config.h"
 
-// Debut: Constantes et Fonctions disponibles aux autres ici
+enum CouleurDetectee {
+    AUCUNE_COULEUR,
+    ROUGE, JAUNE, ORANGE, BLEU, VERT
+};
 
-
-// Fin
+bool InitialiserCouleurDel();
+void ActualiserCouleurDel();
+CouleurDetectee ObtenirCouleurDetectee();
 
 #endif
