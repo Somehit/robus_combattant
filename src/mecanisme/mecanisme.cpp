@@ -67,6 +67,15 @@ void RamasserVerre()
 }
 
 /**
+ * @brief Effectue un mouvement rapide vers l'avant pour renverser la quille.
+ */
+void FaireTomberQuille()
+{
+    // Rien pour l'instant
+    // La quille sera probablement renversée par le déplacement du robot.
+}
+
+/**
  * @brief Dépose le verre à la fin du parcours.
  */
 void DeposerVerre()
@@ -88,6 +97,17 @@ void DeposerVerre()
     {
 
     }
+*/
+
+/*void loop()
+{
+    FaireTomberQuille();
+
+    while(true)
+    {
+
+    }
+}
 */
 
 

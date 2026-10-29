@@ -26,3 +26,42 @@ void loop()
     
 }
 
+/* TEST
+
+CouleurDetectee derniereMission = AUCUNE_COULEUR;
+
+
+/*void loop()
+{
+    ActualiserCouleurDel();
+
+    CouleurDetectee couleur = ObtenirCouleurDetectee();
+
+    if (couleur != derniereMission)
+    {
+        switch(couleur)
+        {
+            case ORANGE:
+
+                Serial.println("Ramassage du verre");
+
+                RamasserVerre();
+
+                break;
+
+            case ROSE:
+
+                Serial.println("Quille detectee");
+
+                FaireTomberQuille();
+
+                break;
+
+            default:
+                break;
+        }
+
+        derniereMission = couleur;
+    }
+}
+*/

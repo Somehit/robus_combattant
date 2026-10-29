@@ -31,12 +31,18 @@ void RamasserVerre();
 void DeposerVerre();
 
 /**
+ * @brief Effectue le mouvement nécessaire pour faire tomber une quille.
+ */
+void FaireTomberQuille();
+
+/**
  * @brief Indique si un verre est actuellement transporté.
  *
  * @return true si un verre est présent dans la pince.
  * @return false sinon.
  */
 bool VerreRamasse();
+
 
 /**
  * @brief Sert à tester le mouvement des servomoteurs.
