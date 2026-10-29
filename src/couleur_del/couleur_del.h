@@ -5,11 +5,7 @@
 
 enum CouleurDetectee {
     AUCUNE_COULEUR,
-    ROUGE,
-    JAUNE,
-    ORANGE,
-    BLEU,
-    VERT
+    ROUGE, JAUNE, ORANGE, BLEU, VERT
 };
 
 bool InitialiserCouleurDel();
