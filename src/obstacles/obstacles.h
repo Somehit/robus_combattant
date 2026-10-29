@@ -3,7 +3,17 @@
 
 #include "config.h"
 
-// Debut: Constantes et Fonctions disponibles aux autres ici
+#include "config.h"
+#include "motor/motor.h"
+#include "couleur_del/couleur_del.h"
+#include "infrared/infrared.h"   // ou "infrared/infrared/infrared.h" selon ton dossier
+#include "suivi_ligne/suivi_ligne.h"
+
+/**
+ * @brief choisit l'action selon couleur
+ */
+void action_obstacle();
+
 
 
 // Fin
