@@ -1,4 +1,4 @@
-#ifndef INFRAROUGE
+/*#ifndef INFRAROUGE
 #define INFRAROUGE
 
 #include "config.h"
@@ -13,3 +13,4 @@ constexpr uint8_t TIMEOUT_MS = 15;
 // Fin
 
 #endif
+*/

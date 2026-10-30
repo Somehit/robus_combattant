@@ -14,7 +14,10 @@
  */
 void action_obstacle();
 
-
+/**
+ * @brief Fait avancer le robot tout droit jusqu'à ce qu'il ne détecte plus d'obstacle.
+ */
+void tout_droit();
 
 // Fin
 

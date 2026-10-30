@@ -9,7 +9,7 @@ void SUIVI_LIGNE_Initialisation()
     MOTOR_SetSpeed(1, 0);
 }
 
-void SUIVI_LIGNE_Execution(float facteur=0.7)// facteur regle vistesse dun coup et aussi sert pour dautre fonction
+void SUIVI_LIGNE_Execution(float facteur)// facteur regle vistesse dun coup et aussi sert pour dautre fonction
 {
     int g = analogRead(PIN_CAPTEUR_GAUCHE);
     int c = analogRead(PIN_CAPTEUR_CENTRE);
