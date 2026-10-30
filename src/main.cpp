@@ -3,8 +3,8 @@
 #include "couleur_del/couleur_del.h"
 
 #include "Couleur.h"
-#include "Mur.h"
-#include "Arret.h"
+#include "Mur/Mur.h"
+#include "Arret/Arret.h"
 
 bool jauneExecute = false;
 bool bleuExecute = false;
