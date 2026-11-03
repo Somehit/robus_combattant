@@ -33,7 +33,7 @@ void SuiviLigneInit();
 /**
  *  @brief suivre la ligne
  */
-void SUIVI_LIGNE_Execution(float facteur= 0.7);
+void SUIVI_LIGNE_Execution(float facteur);
 
 
 #endif

@@ -45,7 +45,7 @@ void RamasserVerre()
     // Referme la pince sur le verre
     FermerPince();
 
-    VerreRamasse = true;
+    VerreRamasse1 = true;
 
     delay(500);
 }
@@ -60,14 +60,19 @@ void FaireTomberQuille()
 
 void DeposerVerre()
 {
-    if(VerreRamasse)
+    if(VerreRamasse1)
     {
         OuvrirPince();
 
         delay(500);
 
-        VerreRamasse = false;
+        VerreRamasse1 = false;
     }
+}
+
+
+bool VerreRamasse(){
+    return VerreRamasse1;
 }
 
 

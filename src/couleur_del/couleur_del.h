@@ -30,8 +30,9 @@ enum CouleurDetectee {
     AUCUNE_COULEUR
 };
 
-/** @brief La couleur qui est actuellement détecter (a utiliser pour choisir les différentes missions). */
-CouleurDetectee CouleurActuelle = AUCUNE_COULEUR;
+CouleurDetectee CouleurActuelle1 = AUCUNE_COULEUR;
+
+CouleurDetectee CouleurActuelle();
 
 /** @brief Broches des DEL, dans le même ordre que l'enum CouleurDetectee. (RJOBV)*/
 constexpr uint8_t BROCHES_LEDS[] = {40, 41, 42, 43, 44};

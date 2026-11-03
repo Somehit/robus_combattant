@@ -42,8 +42,8 @@ void attendreSignalDepart();
 
 // A FAIRE
 void stopMotors();
-bool messageReveilRecul();
-void beep();
+//bool messageReveilRecul();
+
 
 
 /**

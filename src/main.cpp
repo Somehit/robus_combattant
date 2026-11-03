@@ -39,18 +39,18 @@ void loop()
 {
     SequenceDels();
 
-    if (CouleurActuelle != JAUNE)
+    if (CouleurActuelle() != JAUNE)
     {
         jauneExecute = false;
     }
 
-    if (CouleurActuelle != BLEU)
+    if (CouleurActuelle() != BLEU)
     {
         bleuExecute = false;
     }
 
     // Detection du mur (jaune)
-    if (CouleurActuelle == JAUNE && !jauneExecute)
+    if (CouleurActuelle() == JAUNE && !jauneExecute)
     {
         jauneExecute = true;
         contournerMur();
@@ -58,7 +58,7 @@ void loop()
     }
 
     // Detection de la zone d'attente (bleu)
-    if (CouleurActuelle == BLEU && !bleuExecute)
+    if (CouleurActuelle() == BLEU && !bleuExecute)
     {
         bleuExecute = true;
         attendreSignalDepart();
