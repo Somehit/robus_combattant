@@ -1,3 +1,15 @@
+/**
+ * ============================================================================
+ *  Robus Combattant — Compétition « Le rectangle »
+ * ============================================================================
+ *  @file    main.h
+ *  @brief   logique global du code
+ *  @details ce qu'il reste: compléter la logique du main
+ *  @author  tlm 
+ *  @date    2026-11-02
+ *  @version 1.0
+ * ============================================================================
+ */
 
 #include "config.h"
 
@@ -10,18 +22,20 @@
 bool jauneExecute = false;
 bool bleuExecute = false;
 
-void setup()
+void setup() // setup tous les .h
 {
-    Serial.begin(115200);
+    BoardInit(); // LibRobus
+    Serial.begin(9600); //meme valeur que dans monitor_speed dans le .ini
 
-    BoardInit();
-
-    MotorsInit();
-    MecanismeInit();
-    SUIVI_LIGNE_Initialisation();
+    MotorsInit(); //encodeurs à 0, moteurs arretés, choix du robot
+    MecanismeInit(); //Servomoteurs 0 et 1
+    SUIVI_LIGNE_Initialisation(); //A0-A2 en entrée
+    InfraredInit(); //Broches IR 48/49
 
     // Initialisation du capteur de couleur
-    InitialiserCouleurDel();
+    if(InitialiserCouleurDel())
+        Serial.println("capeur couleur TCS34725 non detecté!");
+    
 }
 
 void loop()
