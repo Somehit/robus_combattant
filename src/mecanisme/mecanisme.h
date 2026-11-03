@@ -21,7 +21,7 @@
 #include "config.h"
 
 
-bool VerreRamasse1 = false;
+
 
 /**
  * @brief Initialise les servomoteurs du mécanisme et ouvre les pinces

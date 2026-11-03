@@ -1,5 +1,6 @@
 #include "mecanisme/mecanisme.h"
 
+bool VerreRamasse1 = false;
 
 void MecanismeInit() //*******ajouter une position de base au pince??
 {

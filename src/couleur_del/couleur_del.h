@@ -30,7 +30,7 @@ enum CouleurDetectee {
     AUCUNE_COULEUR
 };
 
-CouleurDetectee CouleurActuelle1 = AUCUNE_COULEUR;
+
 
 CouleurDetectee CouleurActuelle();
 
