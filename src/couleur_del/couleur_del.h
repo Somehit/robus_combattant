@@ -30,11 +30,11 @@ enum CouleurDetectee {
     AUCUNE_COULEUR
 };
 
-/** @brief La couleur qui est actuellement détecter (a utiliser pour choisir les différente missions). */
+/** @brief La couleur qui est actuellement détecter (a utiliser pour choisir les différentes missions). */
 CouleurDetectee CouleurActuelle = AUCUNE_COULEUR;
 
-/** @brief Broches des DEL, dans le même ordre que l'enum CouleurDetectee. */
-constexpr uint8_t BROCHES_LEDS[] = {9, 10, 11, 12, 13};
+/** @brief Broches des DEL, dans le même ordre que l'enum CouleurDetectee. (RJOBV)*/
+constexpr uint8_t BROCHES_LEDS[] = {40, 41, 42, 43, 44};
 
 /** @brief Durée d'allumage d'une DEL en millisecondes. */
 constexpr unsigned long DUREE_DEL = 10000;
@@ -101,7 +101,11 @@ void ActualiserDel();
  */
 void EteindreDels();
 
-
+/**
+ * @brief Scan la couleur et écris la couleur trouver sur la variable CouleurActuelle,
+ *        Allume la led correspondant a la couleur
+ *        Éteind la led apres 10sec
+ */
 void SequenceDels();
 
 #endif
