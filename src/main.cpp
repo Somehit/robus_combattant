@@ -7,22 +7,17 @@
 #include "obstacles/obstacles.h"
 #include "suivi_ligne/suivi_ligne.h"
 
-void setup()
-{
-    Serial.begin(115200);
 
+void setup() {
+    Serial.begin(9600);
     BoardInit();
 
-    MotorsInit();
-    MecanismeInit();
-    SUIVI_LIGNE_Initialisation();
-
-    // Ajouter ici les autres fonctions d'initialisation
-    // lorsqu'elles seront disponibles
+    if (!InitialiserCouleurDel()) {
+        Serial.println("Erreur : capteur non detecte!");
+    }
 }
 
-void loop()
-{
-    
+void loop() {
+   
 }
 
