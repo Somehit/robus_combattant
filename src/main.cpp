@@ -1,3 +1,4 @@
+
 #include "config.h"
 
 #include "motor/motor.h"
@@ -7,13 +8,12 @@
 #include "mecanisme/mecanisme.h"
 #include "suivi_ligne/suivi_ligne.h"
 
-#include "Mur/Mur.h"
-#include "Arret/Arret.h"
-#include "obstacles/obstacles.h"
-bool roseExecute = false;
+#include "Couleur.h"
+#include "Mur.h"
+#include "Arret.h"
+
 bool jauneExecute = false;
-bool orangeExecute = false;
-bool vertExecute = false;
+bool bleuExecute = false;
 
 void setup()
 {
@@ -24,89 +24,40 @@ void setup()
     MotorsInit();
     MecanismeInit();
     SUIVI_LIGNE_Initialisation();
-    InfraredInit();
 
-    if (!InitialiserCouleurDel())
-    {
-        Serial.println("Erreur : capteur non detecte!");
-    }
+    // Initialisation du capteur de couleur
+    initCouleur();
 }
 
 void loop()
 {
-    SUIVI_LIGNE_Execution();
+    Couleur couleur = detecterCouleur();
 
-    ActualiserCouleurDel();
-
-    CouleurDetectee couleur = ObtenirCouleurDetectee();
-
-    switch(couleur)
+    if (couleur != JAUNE)
     {
-        case ROUGE:
-
-            if(!roseExecute)
-            {
-                Serial.println("Mission ROSE");
-
-                FaireTomberQuille();
-
-                roseExecute = true;
-            }
-            break;
-
-        case JAUNE:
-
-            if(!jauneExecute)
-            {
-                Serial.println("Mission JAUNE");
-
-                mur();
-
-                jauneExecute = true;
-            }
-            break;
-
-        case ORANGE:
-
-            if(!orangeExecute)
-            {
-                Serial.println("Mission ORANGE");
-
-                RamasserVerre();
-
-                orangeExecute = true;
-            }
-            break;
-
-        case VERT:
-
-            if(!vertExecute)
-            {
-                Serial.println("Mission VERTE");
-
-                tout_droit();
-
-                vertExecute = true;
-            }
-            break;
-
-        default:
-            break;
+        jauneExecute = false;
     }
 
-    // Fin du parcours
-    if(roseExecute &&
-       jauneExecute &&
-       orangeExecute &&
-       vertExecute)
+    if (couleur != BLEU)
     {
-        if(VerreRamasse())
-        {
-            DeposerVerre();
-        }
-
-        while(true)
-        {
-        }
+        bleuExecute = false;
     }
+
+    // Detection du mur (jaune)
+    if (couleur == JAUNE && !jauneExecute)
+    {
+        jauneExecute = true;
+        mur();
+        return;
+    }
+
+    // Detection de la zone d'attente (bleu)
+    if (couleur == BLEU && !bleuExecute)
+    {
+        bleuExecute = true;
+        arret();
+        return;
+    }
+
+    // Ajouter ici la fonction de suivi de ligne
 }
