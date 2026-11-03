@@ -65,7 +65,7 @@ constexpr float SEUILS_MAX[5][3] = {
  *
  * @return bool true si le capteur est détecté, false sinon.
  */
-bool InitialiserCouleurDel();
+bool CouleurDelInit();
 
 /**
  * @brief Lit le capteur et retourne la couleur détectée.

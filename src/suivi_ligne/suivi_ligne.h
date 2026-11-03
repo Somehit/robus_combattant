@@ -28,7 +28,7 @@ constexpr int SEUIL_D =114;//ici selon jeudi, trois ligne diff donnait des truc 
 /**
  * @brief initialiser suiveur de ligne
  */
-void SUIVI_LIGNE_Initialisation();
+void SuiviLigneInit();
 
 /**
  *  @brief suivre la ligne

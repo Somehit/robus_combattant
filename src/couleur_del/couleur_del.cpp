@@ -9,7 +9,7 @@ static bool capteurPret = false;
 static bool delActive = false;
 static unsigned long debutDEL = 0;
 
-bool InitialiserCouleurDel() {
+bool CouleurDelInit() {
     for (int i = 0; i < 5; i++) {
         pinMode(BROCHES_LEDS[i], OUTPUT);
         digitalWrite(BROCHES_LEDS[i], LOW);

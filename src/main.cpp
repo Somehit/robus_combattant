@@ -2,7 +2,7 @@
  * ============================================================================
  *  Robus Combattant — Compétition « Le rectangle »
  * ============================================================================
- *  @file    main.h
+ *  @file    main.cpp
  *  @brief   logique global du code
  *  @details ce qu'il reste: compléter la logique du main
  *  @author  tlm 
@@ -22,24 +22,22 @@
 bool jauneExecute = false;
 bool bleuExecute = false;
 
-void setup() // setup tous les .h
+void setup() // setup tous les .h 
 {
-    BoardInit(); // LibRobus
     Serial.begin(9600); //meme valeur que dans monitor_speed dans le .ini
+    BoardInit(); // LibRobus
 
-    MotorsInit(); //encodeurs à 0, moteurs arretés, choix du robot
-    MecanismeInit(); //Servomoteurs 0 et 1
-    SUIVI_LIGNE_Initialisation(); //A0-A2 en entrée
-    InfraredInit(); //Broches IR 48/49
-
-    // Initialisation du capteur de couleur
-    if(InitialiserCouleurDel())
-        Serial.println("capeur couleur TCS34725 non detecté!");
+    CouleurDelInit(); //Pins 40, 41, 42, 43, 44 en output et set a LOW
+    InfraredInit();   //Broches IR 48/49
+    MotorsInit();     //encodeurs à 0, moteurs arretés, choix du robot
+    MecanismeInit();  //Servomoteurs 0 et 1
+    SuiviLigneInit(); //Pins A0, A1, A2 en entrée
     
 }
 
 void loop()
 {
+    SequenceDels();
 
     if (CouleurActuelle != JAUNE)
     {

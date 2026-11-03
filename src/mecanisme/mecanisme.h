@@ -21,9 +21,10 @@
 #include "config.h"
 
 
+bool VerreRamasse = false;
 
 /**
- * @brief Initialise les servomoteurs du mécanisme.
+ * @brief Initialise les servomoteurs du mécanisme et ouvre les pinces
  */
 void MecanismeInit();
 
@@ -52,13 +53,13 @@ void DeposerVerre();
  */
 void FaireTomberQuille();
 
-/**
- * @brief Indique si un verre est actuellement transporté.
- *
- * @return true si un verre est présent dans la pince.
- * @return false sinon.
- */
-bool VerreRamasse();
+// /**
+//  * @brief Indique si un verre est actuellement transporté.
+//  *
+//  * @return true si un verre est présent dans la pince.
+//  * @return false sinon.
+//  */
+// bool VerreRamasse();
 
 
 /**
