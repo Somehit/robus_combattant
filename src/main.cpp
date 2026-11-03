@@ -1,112 +1,69 @@
-#include "config.h"
+/**
+ * ============================================================================
+ *  Robus Combattant — Compétition « Le rectangle »
+ * ============================================================================
+ *  @file    main.cpp
+ *  @brief   logique global du code
+ *  @details ce qu'il reste: compléter la logique du main
+ *  @author  tlm 
+ *  @date    2026-11-02
+ *  @version 1.0
+ * ============================================================================
+ */
 
-#include "motor/motor.h"
+#include "config.h"
 
 #include "motor/motor.h"
 #include "couleur_del/couleur_del.h"
 #include "mecanisme/mecanisme.h"
 #include "suivi_ligne/suivi_ligne.h"
-
-#include "Mur/Mur.h"
-#include "Arret/Arret.h"
 #include "obstacles/obstacles.h"
-bool roseExecute = false;
+
 bool jauneExecute = false;
-bool orangeExecute = false;
-bool vertExecute = false;
+bool bleuExecute = false;
 
-void setup()
+void setup() // setup tous les .h 
 {
-    Serial.begin(115200);
+    Serial.begin(9600); //meme valeur que dans monitor_speed dans le .ini
+    BoardInit(); // LibRobus
 
-    BoardInit();
-
-    MotorsInit();
-    MecanismeInit();
-    SUIVI_LIGNE_Initialisation();
-    InfraredInit();
-
-    if (!InitialiserCouleurDel())
-    {
-        Serial.println("Erreur : capteur non detecte!");
-    }
+    CouleurDelInit(); //Pins 40, 41, 42, 43, 44 en output et set a LOW
+    InfraredInit();   //Broches IR 48/49
+    MotorsInit();     //encodeurs à 0, moteurs arretés, choix du robot
+    MecanismeInit();  //Servomoteurs 0 et 1
+    SuiviLigneInit(); //Pins A0, A1, A2 en entrée
+    
 }
 
 void loop()
 {
-    SUIVI_LIGNE_Execution();
+    SequenceDels();
 
-    ActualiserCouleurDel();
-
-    CouleurDetectee couleur = ObtenirCouleurDetectee();
-
-    switch(couleur)
+    if (CouleurActuelle != JAUNE)
     {
-        case ROUGE:
-
-            if(!roseExecute)
-            {
-                Serial.println("Mission ROSE");
-
-                FaireTomberQuille();
-
-                roseExecute = true;
-            }
-            break;
-
-        case JAUNE:
-
-            if(!jauneExecute)
-            {
-                Serial.println("Mission JAUNE");
-
-                mur();
-
-                jauneExecute = true;
-            }
-            break;
-
-        case ORANGE:
-
-            if(!orangeExecute)
-            {
-                Serial.println("Mission ORANGE");
-
-                RamasserVerre();
-
-                orangeExecute = true;
-            }
-            break;
-
-        case VERT:
-
-            if(!vertExecute)
-            {
-                Serial.println("Mission VERTE");
-
-                tout_droit();
-
-                vertExecute = true;
-            }
-            break;
-
-        default:
-            break;
+        jauneExecute = false;
     }
 
-    // Fin du parcours
-    if(roseExecute &&
-       jauneExecute &&
-       orangeExecute &&
-       vertExecute)
+    if (CouleurActuelle != BLEU)
     {
-        if(VerreRamasse())
-        {
-            DeposerVerre();
-        }
-
-        while(true)
-        {
-        }
+        bleuExecute = false;
     }
+
+    // Detection du mur (jaune)
+    if (CouleurActuelle == JAUNE && !jauneExecute)
+    {
+        jauneExecute = true;
+        contournerMur();
+        return;
+    }
+
+    // Detection de la zone d'attente (bleu)
+    if (CouleurActuelle == BLEU && !bleuExecute)
+    {
+        bleuExecute = true;
+        attendreSignalDepart();
+        return;
+    }
+
+    // Ajouter ici la fonction de suivi de ligne
 }

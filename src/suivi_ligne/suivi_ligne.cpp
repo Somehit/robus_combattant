@@ -1,6 +1,6 @@
 #include "suivi_ligne/suivi_ligne.h"
 
-void SUIVI_LIGNE_Initialisation()
+void SuiviLigneInit()
 {
     pinMode(PIN_CAPTEUR_GAUCHE, INPUT);
     pinMode(PIN_CAPTEUR_CENTRE, INPUT);
