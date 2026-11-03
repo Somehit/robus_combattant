@@ -1,5 +1,6 @@
 #include "couleur_del.h"
 
+CouleurDetectee CouleurActuelle1 = AUCUNE_COULEUR;
 
 static Adafruit_TCS34725 capteur(
     TCS34725_INTEGRATIONTIME_50MS,
