@@ -37,33 +37,21 @@ void setup() // setup tous les .h
 
 void loop()
 {
-    SequenceDels();
+    delay(5000);
+    SERVO_SetAngle(0, 55);
 
-    if (CouleurActuelle() != JAUNE)
-    {
-        jauneExecute = false;
-    }
+    delay(110500);
+    float a;
+    a = SONAR_GetRange(0);
 
-    if (CouleurActuelle() != BLEU)
-    {
-        bleuExecute = false;
-    }
+   Serial.print("\n");
+   Serial.print(a);
+   Serial.println("cm");
+   delay(5000);
 
-    // Detection du mur (jaune)
-    if (CouleurActuelle() == JAUNE && !jauneExecute)
-    {
-        jauneExecute = true;
-        contournerMur();
-        return;
-    }
+   OuvrirPince();
 
-    // Detection de la zone d'attente (bleu)
-    if (CouleurActuelle() == BLEU && !bleuExecute)
-    {
-        bleuExecute = true;
-        attendreSignalDepart();
-        return;
-    }
+   delay(110500);
 
     // Ajouter ici la fonction de suivi de ligne
 }

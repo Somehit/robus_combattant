@@ -1,18 +1,23 @@
 #include "mecanisme/mecanisme.h"
+#include <motor/motor.h>
 
 bool VerreRamasse1 = false;
+
+bool VerreRamasse(){
+    return VerreRamasse1;
+}
 
 void MecanismeInit() //*******ajouter une position de base au pince??
 {
     SERVO_Enable(0); // J6
-    SERVO_SetAngle(0, 20);
+    SERVO_SetAngle(0, 90); // Position initiale du servomoteur 0 (pince)
 
-    delay(50); //delay juste pour sassurer qu la pince est ouverte
+    delay(1000); //delay juste pour sassurer qu la pince est ouverte
 }
 
 void OuvrirPince()
 {
-    for(int angle = 90; angle >= 20; angle--)
+    for(int angle = 55; angle <= 90; angle++)
     {
         SERVO_SetAngle(0, angle);
         //SERVO_SetAngle(1, 180 - angle);
@@ -24,7 +29,7 @@ void OuvrirPince()
 
 void FermerPince()
 {
-    for(int angle = 20; angle <= 90; angle++)
+    for(int angle = 90; angle >= 55; angle--)
     {
         SERVO_SetAngle(0, angle);
         //SERVO_SetAngle(1, 180 - angle);
@@ -36,8 +41,9 @@ void FermerPince()
 
 void RamasserVerre()
 {
-    // Ouvre la pince
-    OuvrirPince();
+
+
+    
 
     delay(500);
 
@@ -72,29 +78,31 @@ void DeposerVerre()
 }
 
 
-bool VerreRamasse(){
-    return VerreRamasse1;
+void TrouverObjet(){
+
+    float distance_trouver;
+
+    MOTOR_SetSpeed(RIGHT, 0.2);
+    MOTOR_SetSpeed(LEFT, -0.2);
+    delay(500);
+
+    MOTOR_SetSpeed(RIGHT, -0.2);
+    MOTOR_SetSpeed(LEFT, 0.2);
+    
+    while (SONAR_GetRange(0)< 50.0){
+    }
+    
+    distance_trouver = SONAR_GetRange(0);
+
+    MOTOR_SetSpeed(RIGHT, 0);
+    MOTOR_SetSpeed(LEFT, 0);
+
+
+    moveForward(distance_trouver/100);
+    //avancer de la distance trouver
+
 }
 
-
-/* RamasserVerre();
-
-    while(true)
-    {
-
-    }
-*/
-
-/*void loop()
-{
-    FaireTomberQuille();
-
-    while(true)
-    {
-
-    }
-}
-*/
 
 
 /**
