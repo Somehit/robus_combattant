@@ -10,6 +10,7 @@ void devier_obstacle()
 {
     if (isObstacle())
     {
+        rotate(ROTATE_RIGHT);
         moveForward(0.5);
         rotate(ROTATE_LEFT);
         moveForward(0.5);
