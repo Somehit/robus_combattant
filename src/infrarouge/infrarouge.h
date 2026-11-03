@@ -1,4 +1,4 @@
-#ifndef INFRAROUGE
+/*#ifndef INFRAROUGE
 #define INFRAROUGE
 
 #include "config.h"
@@ -14,3 +14,4 @@ constexpr uint8_t COMMANDE_REVEIL = 0x10;
 void InfrarougeInit();
 bool InfrarougeDetection();
 
+#endif
