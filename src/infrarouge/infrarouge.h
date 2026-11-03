@@ -1,16 +1,34 @@
-/*#ifndef INFRAROUGE
-#define INFRAROUGE
+#include <LibRobus.h> // inclut deja IRremote (ancienne API: IRsend)
 
-#include "config.h"
-#include <IRrecv.h>
-#include <IRutils.h>
+IRsend irsend; // sur Arduino Mega, la LED IR est forcement sur la broche 9 (timer 2)
 
-// Debut: Constantes et Fonctions disponibles aux autres ici
-constexpr uint16_t IR_RECEIVER_PIN = 999;
-constexpr uint16_t RECEIVER_BUFFER_SIZE = 102;
-constexpr uint8_t TIMEOUT_MS = 15;
+// Broches
+const int BOUTON_START = 4;
+const int BOUTON_WAKE = 5;
 
-// Fin
+const int LED_ROUGE = 6;
+const int LED_VERTE = 7;
 
-#endif
-*/
+const int LED_IR = 9;
+
+// Codes infrarouges
+const uint8_t ADRESSE_IR = 0x00;
+const uint8_t CODE_START = 0x10;
+const uint8_t CODE_WAKE = 0x20;
+
+// Gestion anti-rebond
+const unsigned long TEMPS_ANTI_REBOND = 50;
+
+struct Bouton {
+int broche;
+bool lecturePrecedente;
+bool etatStable;
+unsigned long dernierChangement;
+};
+
+Bouton start = {BOUTON_START, LOW, LOW, 0};
+Bouton wake = {BOUTON_WAKE, LOW, LOW, 0};
+
+void envoyerCode(uint8_t code);
+bool appuiDetecte(Bouton &bouton);
+void setupInfrarouge();
