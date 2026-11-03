@@ -40,20 +40,19 @@ void setup() // setup tous les .h
 
 void loop()
 {
-    CouleurDetectee couleur = LireCouleur();
 
-    if (couleur != JAUNE)
+    if (CouleurActuelle != JAUNE)
     {
         jauneExecute = false;
     }
 
-    if (couleur != BLEU)
+    if (CouleurActuelle != BLEU)
     {
         bleuExecute = false;
     }
 
     // Detection du mur (jaune)
-    if (couleur == JAUNE && !jauneExecute)
+    if (CouleurActuelle == JAUNE && !jauneExecute)
     {
         jauneExecute = true;
         contournerMur();
@@ -61,7 +60,7 @@ void loop()
     }
 
     // Detection de la zone d'attente (bleu)
-    if (couleur == BLEU && !bleuExecute)
+    if (CouleurActuelle == BLEU && !bleuExecute)
     {
         bleuExecute = true;
         attendreSignalDepart();

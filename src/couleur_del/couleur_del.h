@@ -30,7 +30,10 @@ enum CouleurDetectee {
     AUCUNE_COULEUR
 };
 
-/** @brief Brochas des DEL, dans le même ordre que l'enum CouleurDetectee. */
+/** @brief La couleur qui est actuellement détecter (a utiliser pour choisir les différente missions). */
+CouleurDetectee CouleurActuelle = AUCUNE_COULEUR;
+
+/** @brief Broches des DEL, dans le même ordre que l'enum CouleurDetectee. */
 constexpr uint8_t BROCHES_LEDS[] = {9, 10, 11, 12, 13};
 
 /** @brief Durée d'allumage d'une DEL en millisecondes. */
@@ -97,5 +100,8 @@ void ActualiserDel();
  * @brief Éteint immédiatement toutes les DEL.
  */
 void EteindreDels();
+
+
+void SequenceDels();
 
 #endif

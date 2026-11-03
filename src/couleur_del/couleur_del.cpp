@@ -66,4 +66,17 @@ void EteindreDels() {
         digitalWrite(BROCHES_LEDS[i], LOW);
     }
     delActive = false;
+    CouleurActuelle = AUCUNE_COULEUR;
+}
+
+
+void SequenceDels(){ //*********vérifier si vu que la fonction est dans loop, il ne faut pas qu'elle se fasse nonstop sinon débutDEL si réinitialise a chaque fois
+    
+    CouleurActuelle = LireCouleur();
+    
+    AllumerDel(CouleurActuelle);
+
+    ActualiserDel();
+
+
 }
