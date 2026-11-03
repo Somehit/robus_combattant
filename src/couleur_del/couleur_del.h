@@ -2,6 +2,7 @@
 #define COULEUR_DEL_H
 
 #include "config.h"
+#include <Adafruit_TCS34725.h>
 
 /** @brief Couleurs reconnaissables par le capteur (l'ordre correspond à BROCHES_LEDS). */
 enum CouleurDetectee {
