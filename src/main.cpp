@@ -1,6 +1,8 @@
 #include "config.h"
 
 #include "motor/motor.h"
+
+#include "motor/motor.h"
 #include "couleur_del/couleur_del.h"
 #include "mecanisme/mecanisme.h"
 #include "suivi_ligne/suivi_ligne.h"

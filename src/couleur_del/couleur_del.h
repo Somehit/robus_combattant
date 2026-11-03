@@ -2,7 +2,9 @@
 #define COULEUR_DEL_H
 
 #include "config.h"
+#include <Adafruit_TCS34725.h>
 
+/** @brief Couleurs reconnaissables par le capteur (l'ordre correspond à BROCHES_LEDS). */
 enum CouleurDetectee {
     ROUGE,
     JAUNE,
@@ -12,32 +14,72 @@ enum CouleurDetectee {
     AUCUNE_COULEUR
 };
 
-const uint8_t BROCHES_LEDS[] = {9, 10, 11, 12, 13};
+/** @brief Brochas des DEL, dans le même ordre que l'enum CouleurDetectee. */
+constexpr uint8_t BROCHES_LEDS[] = {9, 10, 11, 12, 13};
 
-const unsigned long INTERVALLE_LECTURE = 100;
-const unsigned long DUREE_DEL = 10000;
+/** @brief Durée d'allumage d'une DEL en millisecondes. */
+constexpr unsigned long DUREE_DEL = 10000;
 
-// Seuils RGB minimums
-const float SEUILS_MIN[5][3] = {
-    {130, 64, 45}, // Rouge/Rose
-    {107, 85, 34}, // Jaune
-    {131, 72, 31}, // Orange
-    {53, 89, 76},  // Bleu
-    {79, 93, 61}   // Vert
+/** @brief Seuils RGB minimums par couleur {R, G, B}. */
+constexpr float SEUILS_MIN[5][3] = {
+    {130, 65, 45}, // Rouge/Rose
+    {110, 85, 35}, // Jaune
+    {130, 70, 35}, // Orange
+    {62, 90, 75},  // Bleu
+    {80, 90, 55}   // Vert
 };
 
-
-// Seuils RGB maximums
-const float SEUILS_MAX[5][3] = {
-    {139, 71, 51},   // Rouge/Rose
-    {120, 97, 48},   // Jaune
-    {142, 79, 44},   // Orange
-    {61, 100, 93},   // Bleu
-    {91, 101, 71}    // Vert
+/** @brief Seuils RGB maximums par couleur {R, G, B}. */
+constexpr float SEUILS_MAX[5][3] = {
+    {140, 75, 55},   // Rouge/Rose
+    {120, 95, 45},   // Jaune
+    {140, 80, 45},   // Orange
+    {72, 100, 85},   // Bleu
+    {90, 100, 65}    // Vert
 };
 
+/**
+ * @brief Initialise le capteur TCS34725 et les broches des DEL.
+ *
+ * Configure les 5 DEL en sortie (éteintes) et démarre la communication I2C.
+ * À appeler une seule fois dans setup().
+ *
+ * @return bool true si le capteur est détecté, false sinon.
+ */
 bool InitialiserCouleurDel();
-void ActualiserCouleurDel();
-CouleurDetectee ObtenirCouleurDetectee();
+
+/**
+ * @brief Lit le capteur et retourne la couleur détectée.
+ *
+ * Compare les valeurs R, G, B mesurées aux seuils SEUILS_MIN / SEUILS_MAX.
+ * Cette fonction est bloquante pendant le temps d'intégration du capteur (~50 ms).
+ * Elle n'allume aucune DEL.
+ *
+ * @return CouleurDetectee La couleur reconnue, ou AUCUNE_COULEUR si aucune
+ *         couleur (ou plusieurs à la fois) ne correspond, ou si le capteur est absent.
+ */
+CouleurDetectee LireCouleur();
+
+/**
+ * @brief Allume la DEL associée à une couleur pendant DUREE_DEL.
+ *
+ * Ne fait rien si la couleur est AUCUNE_COULEUR ou si une DEL est déjà allumée
+ * (elle doit d'abord s'éteindre). L'extinction est gérée par ActualiserDel().
+ *
+ * @param couleur Couleur dont on veut allumer la DEL.
+ */
+void AllumerDel(CouleurDetectee couleur);
+
+/**
+ * @brief Éteint la DEL une fois DUREE_DEL écoulée (non bloquant).
+ *
+ * À appeler à chaque tour de loop().
+ */
+void ActualiserDel();
+
+/**
+ * @brief Éteint immédiatement toutes les DEL.
+ */
+void EteindreDels();
 
 #endif
