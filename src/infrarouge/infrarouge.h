@@ -2,14 +2,16 @@
 #define INFRAROUGE
 
 #include "config.h"
-#include <IRrecv.h>
-#include <IRutils.h>
+#include <IRremote.hpp>
 
-// Debut: Constantes et Fonctions disponibles aux autres ici
-constexpr uint16_t IR_RECEIVER_PIN = 999;
-constexpr uint16_t RECEIVER_BUFFER_SIZE = 102;
-constexpr uint8_t TIMEOUT_MS = 15;
+// Broche du recepteur infrarouge
+constexpr uint8_t IR_RECEIVER_PIN = 23;
 
-// Fin
+// Commande qui permet de reveiller le robot
+constexpr uint8_t COMMANDE_REVEIL = 0x10;
+
+// Fonctions disponibles
+void InfrarougeInit();
+bool InfrarougeDetection();
 
 #endif
