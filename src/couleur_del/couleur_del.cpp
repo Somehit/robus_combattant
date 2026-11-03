@@ -1,5 +1,4 @@
 #include "couleur_del.h"
-#include <Adafruit_TCS34725.h>
 
 static Adafruit_TCS34725 capteur(
     TCS34725_INTEGRATIONTIME_50MS,
