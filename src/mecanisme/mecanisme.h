@@ -1,3 +1,20 @@
+/**
+ * ============================================================================
+ *  Robus Combattant — Compétition « Le rectangle »
+ * ============================================================================
+ *  @file    mecanisme.h
+ *  @brief   commande des servomoteurs
+ *
+ *  @details ouvrir/fermer la pince
+ *           ramasser/déposer le verre
+ *           Faire tomber la quille 
+ *
+ *  @author  Jérémy
+ *  @date    2026-11-02
+ *  @version 1.0
+ * ============================================================================
+ */
+
 #ifndef MECANISME_H
 #define MECANISME_H
 

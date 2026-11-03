@@ -1,3 +1,17 @@
+/**
+ * ============================================================================
+ *  Robus Combattant — Compétition « Le rectangle »
+ * ============================================================================
+ *  @file    suivi_lignes.h
+ *  @brief   Suivi de ligne avec 3 capteurs de réflexion gauche centre droit sur A0 à A2
+ *
+ *  @details Fajuste les moteurs pour rester sur la ligne
+ *
+ *  @author  Charles 
+ *  @date    2026-11-02
+ *  @version 1.0
+ * ============================================================================
+ */
 #ifndef SUIVI_LIGNE
 #define SUIVI_LIGNE
 

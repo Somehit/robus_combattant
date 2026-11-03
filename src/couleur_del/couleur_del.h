@@ -1,3 +1,19 @@
+/**
+ * ============================================================================
+ *  Robus Combattant — Compétition « Le rectangle »
+ * ============================================================================
+ *  @file    couleur_del.h
+ *  @brief   Détection de la couleur au sol
+ *
+ *  @details detection de la couleur du sol avec le Capteur TCS34725
+ *           allumage pendant 10 s de la DEL qui correspond à la broches 9 à 13 
+ *
+ *  @author  Francois
+ *  @date    2026-11-02
+ *  @version 1.0
+ * ============================================================================
+ */
+
 #ifndef COULEUR_DEL_H
 #define COULEUR_DEL_H
 

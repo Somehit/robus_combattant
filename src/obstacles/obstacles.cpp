@@ -73,3 +73,46 @@ void action_obstacle()// fonction qui execute fonction selon couleur detecter
         tout_droit();
     }
 }
+
+void contournerMur(){
+        
+    while (!isObstacle()) {
+        moveForward(0.01f);
+    }
+
+    
+    rotate(ROTATE_RIGHT);
+
+    
+    moveForward(0.30f);
+
+    
+    rotate(ROTATE_LEFT);
+
+    
+    moveForward(0.50f);
+
+    
+    rotate(ROTATE_LEFT);
+
+    
+    moveForward(0.30f);
+
+    
+    rotate(ROTATE_RIGHT);
+}
+void attendreSignalDepart(){
+
+    stopMotors();
+
+    
+    while (!messageReveilRecul()) {
+        delay(10);
+    }
+
+    
+    for (int i = 0; i < 3; i++) {
+        beep();
+        delay(150);
+    }
+}

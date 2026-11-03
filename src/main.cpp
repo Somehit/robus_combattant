@@ -2,15 +2,10 @@
 #include "config.h"
 
 #include "motor/motor.h"
-
-#include "motor/motor.h"
 #include "couleur_del/couleur_del.h"
 #include "mecanisme/mecanisme.h"
 #include "suivi_ligne/suivi_ligne.h"
-
-#include "Couleur.h"
-#include "Mur.h"
-#include "Arret.h"
+#include "obstacles/obstacles.h"
 
 bool jauneExecute = false;
 bool bleuExecute = false;
@@ -26,12 +21,12 @@ void setup()
     SUIVI_LIGNE_Initialisation();
 
     // Initialisation du capteur de couleur
-    initCouleur();
+    InitialiserCouleurDel();
 }
 
 void loop()
 {
-    Couleur couleur = detecterCouleur();
+    CouleurDetectee couleur = LireCouleur();
 
     if (couleur != JAUNE)
     {
@@ -47,7 +42,7 @@ void loop()
     if (couleur == JAUNE && !jauneExecute)
     {
         jauneExecute = true;
-        mur();
+        contournerMur();
         return;
     }
 
@@ -55,7 +50,7 @@ void loop()
     if (couleur == BLEU && !bleuExecute)
     {
         bleuExecute = true;
-        arret();
+        attendreSignalDepart();
         return;
     }
 
