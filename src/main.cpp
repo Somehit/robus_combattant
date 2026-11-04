@@ -5,7 +5,7 @@
  *  @file    main.cpp
  *  @brief   logique global du code
  *  @details ce qu'il reste: compléter la logique du main
- *  @author  tlm 
+ *  @author  tlm
  *  @date    2026-11-02
  *  @version 1.0
  * ============================================================================
@@ -28,32 +28,34 @@ bool isGreenFinished = false;
 bool isYellowFinished = false;
 bool isOrangeFinished = false;
 
-void setup() // setup tous les .h 
+void setup() // setup tous les .h
 {
-    Serial.begin(9600); //meme valeur que dans monitor_speed dans le .ini
-    BoardInit(); // LibRobus
+    Serial.begin(9600); // meme valeur que dans monitor_speed dans le .ini
+    
+    BoardInit();        // LibRobus
     setupInfrarouge();
-    CouleurDelInit(); //Pins 40, 41, 42, 43, 44 en output et set a LOW
-    InfraredInit();   //Broches IR 48/49
-    MotorsInit();     //encodeurs à 0, moteurs arretés, choix du robot
-    MecanismeInit();  //Servomoteurs 0 et 1
-    SuiviLigneInit(); //Pins A0, A1, A2 en entrée
+    CouleurDelInit(); // Pins 40, 41, 42, 43, 44 en output et set a LOW
+    InfraredInit();   // Broches IR 48/49
+    MotorsInit();     // encodeurs à 0, moteurs arretés, choix du robot
+    MecanismeInit();  // Servomoteurs 0 et 1
+    SuiviLigneInit(); // Pins A0, A1, A2 en entrée
 }
-
 
 void loop()
 {
-    //logique pour commencer
-    if(ROBUS_IsBumper(3) || appuiDetecte(start)){
-        if(started) 
+    // logique pour commencer
+    if (ROBUS_IsBumper(3) || appuiDetecte(start))
+    {
+        if (started)
             started = false;
         started = true;
     }
-    //LOGIQUE une fois commencé
-    if(started){
-        //start();//---------
-        LireCouleur();
-        ActualiserDel();
+
+    // LOGIQUE une fois commencé
+    if (started)
+    {
+        // start();//---------
+        SequenceDels();
         SUIVI_LIGNE_Execution(0.7);
 
         // Detection du mur (jaune)
@@ -67,7 +69,7 @@ void loop()
         // Detection de la zone d'attente (bleu)
         if (CouleurActuelle() == BLEU && !isBlueFinished)
         {
-            attendreSignalDepart();//-------
+            attendreSignalDepart(); //-------
             isBlueFinished = true;
             return;
         }
@@ -75,9 +77,9 @@ void loop()
         // rammasser le verre
         if (CouleurActuelle() == ORANGE && !isOrangeFinished)
         {
-            //trouver_verre();//------
+            // trouver_verre();//------
             RamasserVerre();
-            //retour_ligne();//-------
+            // retour_ligne();//-------
             isOrangeFinished = true;
             return;
         }
@@ -85,9 +87,38 @@ void loop()
         // defoncer la quille
         if (CouleurActuelle() == ROUGE && !isRedFinished)
         {
-            //trouver_quille();//-------
-            FaireTomberQuille();//-----
-            //retour_ligne();//---------
+            // Remettre les encodeurs a zero avant de tourner
+            ENCODER_ReadReset(LEFT);
+            ENCODER_ReadReset(RIGHT);
+
+            // Tourner jusqu'a detecter un obstacle
+            while (obstacleDetecterADistance(0.5f) == -1)
+            {
+                MOTOR_SetSpeed(LEFT, 0.4);
+                MOTOR_SetSpeed(RIGHT, -0.4);
+            }
+
+            stopMotors();
+
+            // Sauvegarder la rotation effectuee moyenne
+            int32_t rotationCounts = (abs(ENCODER_Read(LEFT)) + abs(ENCODER_Read(RIGHT))) / 2;
+
+            // Calculer la distance pour avancer
+            float distanceAvancer = obstacleDetecterADistance(0.5f) + 0.3f;
+            moveForward(distanceAvancer);
+
+            // Revenir en arriere
+            rotate(ROTATE_LEFT);
+            rotate(ROTATE_LEFT);
+
+            moveForward(distanceAvancer);
+
+            rotate(ROTATE_LEFT);
+            rotate(ROTATE_LEFT);
+
+            // Revenir a l'orientation initiale
+            rotateCounts(ROTATE_LEFT, rotationCounts);
+
             isRedFinished = true;
             return;
         }
@@ -100,6 +131,5 @@ void loop()
             return;
         }
     }
-return;
-    
+    return;
 }

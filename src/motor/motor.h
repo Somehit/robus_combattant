@@ -80,11 +80,33 @@ void MotorsInit();
 void moveForward(float distanceMeters);
 
 /**
+ * @brief Arrete les 2 moteurs
+ */
+void stopMotors();
+
+
+/**
  * Tourne le robot sur place d'un quart de tour.
  * Bloque jusqu'a ce que la rotation soit terminee.
  *
  * @param direction Sens de rotation (ROTATE_LEFT ou ROTATE_RIGHT)
  */
 void rotate(RotationDirection direction);
+
+/**
+ * Tourne le robot sur place selon un nombre d'impulsions d'encodeur.
+ *
+ * @param direction Sens de rotation
+ * @param targetCounts Nombre d'impulsions par roue
+ */
+void rotateCounts(RotationDirection direction, int32_t targetCounts);
+
+/**
+ * Tourne le robot selon un angle specifique.
+ * Positif = droite, negatif = gauche.
+ *
+ * @param degrees Angle en degres
+ */
+void rotateDegrees(float degrees);
 
 #endif

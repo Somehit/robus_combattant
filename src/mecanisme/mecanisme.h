@@ -68,7 +68,6 @@ void FaireTomberQuille();
  */
 void ComprehensionServo();
 
-
 bool VerreRamasse();
 
 #endif

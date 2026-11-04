@@ -22,11 +22,12 @@ const uint8_t CODE_WAKE = 0x20;
 // Gestion anti-rebond
 const unsigned long TEMPS_ANTI_REBOND = 50;
 
-struct Bouton {
-int broche;
-bool lecturePrecedente;
-bool etatStable;
-unsigned long dernierChangement;
+struct Bouton
+{
+    int broche;
+    bool lecturePrecedente;
+    bool etatStable;
+    unsigned long dernierChangement;
 };
 
 extern Bouton start;
