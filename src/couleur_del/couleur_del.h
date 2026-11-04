@@ -103,10 +103,8 @@ void ActualiserDel();
 void EteindreDels();
 
 /**
- * @brief Scan la couleur et écris la couleur trouver sur la variable CouleurActuelle,
- *        Allume la led correspondant a la couleur
- *        Éteind la led apres 10sec
+ * @brief Donne la couleur actuelle.
  */
-void SequenceDels();
+CouleurDetectee CouleurActuelle();
 
 #endif
