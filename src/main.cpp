@@ -52,7 +52,8 @@ void loop()
     //LOGIQUE une fois commencé
     if(started){
         //start();//---------
-        SequenceDels();
+        LireCouleur();
+        ActualiserDel();
         SUIVI_LIGNE_Execution(0.7);
 
         // Detection du mur (jaune)

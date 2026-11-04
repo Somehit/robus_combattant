@@ -23,14 +23,15 @@ bool CouleurDelInit() {
 }
 
 CouleurDetectee LireCouleur() {
-    if (!capteurPret)
+    if (!capteurPret){
         return AUCUNE_COULEUR;
+    }
 
     float r, g, b;
     capteur.getRGB(&r, &g, &b);
-
     CouleurDetectee trouvee = AUCUNE_COULEUR;
     int nbCorrespondances = 0;
+
 
     for (int i = 0; i < 5; i++) {
         if (r >= SEUILS_MIN[i][0] && r <= SEUILS_MAX[i][0] &&
@@ -42,9 +43,11 @@ CouleurDetectee LireCouleur() {
     }
 
     // ambiguïté si plus qu'une couleur marche
-    if (nbCorrespondances != 1)
+    if (nbCorrespondances != 1){
         return AUCUNE_COULEUR;
+    }
 
+    AllumerDel(trouvee);
     return trouvee;
 }
 
@@ -72,18 +75,3 @@ void EteindreDels() {
 }
 
 
-void SequenceDels(){ //*********vérifier si vu que la fonction est dans loop, il ne faut pas qu'elle se fasse nonstop sinon débutDEL si réinitialise a chaque fois
-    
-    CouleurActuelle1 = LireCouleur();
-    
-    AllumerDel(CouleurActuelle1);
-
-    ActualiserDel();
-
-
-}
-
-
-CouleurDetectee CouleurActuelle() {
-    return CouleurActuelle1;
-}
