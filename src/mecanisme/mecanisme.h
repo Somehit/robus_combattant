@@ -21,6 +21,7 @@
 #include "config.h"
 
 
+constexpr int msParDegree = 5;
 
 
 /**
