@@ -101,9 +101,15 @@ void contournerMur(){
     
     rotate(ROTATE_RIGHT);
 }
-void attendreSignalDepart(){
+void attendreSignalDepart()
+{
 
-    stopMotors();
+    MOTOR_SetSpeed(0, 0);  
+    MOTOR_SetSpeed(1, 0);
+
+    while(!appuiDetecte(wake)){
+        delay(100);
+    }
 
     
     // while (!messageReveilRecul()) {

@@ -18,7 +18,7 @@
 #define OBSTACLES
 
 #include "config.h"
-
+#include "infrarouge/infrarouge.h"
 #include "config.h"
 #include "motor/motor.h"
 #include "couleur_del/couleur_del.h"
