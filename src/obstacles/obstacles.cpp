@@ -5,7 +5,8 @@ int color()
 {
     return 1;
 }
-//detecte mur fait un 90 , avance,... pour contourner 
+
+// detecte mur fait un 90 , avance,... pour contourner
 void devier_obstacle()
 {
     if (isObstacle())
@@ -18,50 +19,53 @@ void devier_obstacle()
         rotate(ROTATE_RIGHT);
     }
 }
+
 // dans parcour avant le vide il ya une ligne horizontale, le robot ralentit quand detecte couleur
-//en etant ralentit, selon se qui capte en premier va faire tourner lautre moteur pour calibrer 
-//et ensuite avancer pendant 0.75
-void tout_droit() 
+// en etant ralentit, selon se qui capte en premier va faire tourner lautre moteur pour calibrer
+// et ensuite avancer pendant 0.75
+void tout_droit()
 {
-    if (isObstacle())// bon ici faudra changer pout que quand il detecte couleur (comme sa pour test)
+    if (isObstacle()) // bon ici faudra changer pout que quand il detecte couleur (comme sa pour test)
     {
         int g = analogRead(PIN_CAPTEUR_GAUCHE);
         int c = analogRead(PIN_CAPTEUR_CENTRE);
         int d = analogRead(PIN_CAPTEUR_DROITE);
         while (!(c > SEUIL_C && g > SEUIL_G && d > SEUIL_D))
-       
-            {
-                g = analogRead(PIN_CAPTEUR_GAUCHE);
-                c = analogRead(PIN_CAPTEUR_CENTRE);
-                d = analogRead(PIN_CAPTEUR_DROITE);
-                if (g > SEUIL_G && d < SEUIL_D)
-                {
-                    MOTOR_SetSpeed(0, 0);
-                    MOTOR_SetSpeed(1, 0.2); 
-                }
-                else if(g < SEUIL_G && d > SEUIL_D)
-                {
-                    MOTOR_SetSpeed(0, 0.2);
-                    MOTOR_SetSpeed(1, 0); 
-                }
-                else  
-                {
-                    SUIVI_LIGNE_Execution(0.20);
-                }
-            }
-            MOTOR_SetSpeed(0,0);
-            MOTOR_SetSpeed(1,0);
-            moveForward(0.85);
+
+        {
             g = analogRead(PIN_CAPTEUR_GAUCHE);
             c = analogRead(PIN_CAPTEUR_CENTRE);
             d = analogRead(PIN_CAPTEUR_DROITE);
-            if (c> SEUIL_C || g > SEUIL_G || d > SEUIL_D)// si il repere la ligne a la fin 
+            if (g > SEUIL_G && d < SEUIL_D)
             {
-                SUIVI_LIGNE_Execution(1.0);
+                MOTOR_SetSpeed(0, 0);
+                MOTOR_SetSpeed(1, 0.2);
             }
-        }       
+            else if (g < SEUIL_G && d > SEUIL_D)
+            {
+                MOTOR_SetSpeed(0, 0.2);
+                MOTOR_SetSpeed(1, 0);
+            }
+            else
+            {
+                SUIVI_LIGNE_Execution(0.20);
+            }
+        }
+        
+        MOTOR_SetSpeed(0, 0);
+        MOTOR_SetSpeed(1, 0);
+        moveForward(0.85);
+        g = analogRead(PIN_CAPTEUR_GAUCHE);
+        c = analogRead(PIN_CAPTEUR_CENTRE);
+        d = analogRead(PIN_CAPTEUR_DROITE);
+        if (c > SEUIL_C || g > SEUIL_G || d > SEUIL_D) // si il repere la ligne a la fin
+        {
+            SUIVI_LIGNE_Execution(1.0);
+        }
     }
-void action_obstacle()// fonction qui execute fonction selon couleur detecter 
+}
+
+void action_obstacle() // fonction qui execute fonction selon couleur detecter
 {
     int color1 = color();
     if (color1 == 0)
@@ -74,51 +78,57 @@ void action_obstacle()// fonction qui execute fonction selon couleur detecter
     }
 }
 
-void contournerMur(){
-        
-    while (!isObstacle()) {
+void contournerMur()
+{
+
+    while (!isObstacle())
+    {
         moveForward(0.01f);
     }
 
-    
     rotate(ROTATE_RIGHT);
 
-    
     moveForward(0.30f);
 
-    
     rotate(ROTATE_LEFT);
 
-    
     moveForward(0.50f);
 
-    
     rotate(ROTATE_LEFT);
 
-    
     moveForward(0.30f);
 
-    
     rotate(ROTATE_RIGHT);
 }
+
 void attendreSignalDepart()
 {
 
-    MOTOR_SetSpeed(0, 0);  
+    MOTOR_SetSpeed(0, 0);
     MOTOR_SetSpeed(1, 0);
 
-    while(!appuiDetecte(wake)){
+    while (!appuiDetecte(wake))
+    {
         delay(100);
     }
 
-    
     // while (!messageReveilRecul()) {
     //     delay(10);
     // }
 
-    
-    for (int i = 0; i < 3; i++) {
-    //beep();
+    for (int i = 0; i < 3; i++)
+    {
+        // beep();
         delay(150);
     }
 }
+
+float obstacleDetecterADistance(float distanceM)
+{
+    if ((SONAR_GetRange(0)/100) <= distanceM)
+    {
+        return SONAR_GetRange(0);
+    }
+
+    return -1;
+}   
