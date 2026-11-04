@@ -1,8 +1,7 @@
-
 #ifndef ARRET_H
 #define ARRET_H
 
-#include <Arduino.h>
+#include "config.h"
 
 void arret();
 

@@ -1,3 +1,18 @@
+/**
+ * ============================================================================
+ *  Robus Combattant — Compétition « Le rectangle »
+ * ============================================================================
+ *  @file    infrared.h
+ *  @brief   Capteurs de proximité IR (broches 48 et 49)
+ *
+ *  @details Détecter un obstacle devant le robot
+ *
+ *  @author  Naguy
+ *  @date    2026-11-02
+ *  @version 1.0
+ * ============================================================================
+ */
+
 #ifndef INFRARED_H
 #define INFRARED_H
 

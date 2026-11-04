@@ -1,53 +1,39 @@
 #include "mecanisme/mecanisme.h"
 
-// Indique si le robot transporte actuellement un verre
-bool verreRamasse = false;
+bool VerreRamasse1 = false;
 
-// Fonction permettant de savoir si un verre est transporté
-bool VerreRamasse()
-{
-    return verreRamasse;
-}
-
-void MecanismeInit()
+void MecanismeInit() //*******ajouter une position de base au pince??
 {
     SERVO_Enable(0); // J6
-    SERVO_Enable(1); // J7
+    SERVO_SetAngle(0, 90); // Position initiale du servomoteur 0 (pince)
 
-    delay(1000);
+    delay(1000); //delay juste pour sassurer qu la pince est ouverte
 }
 
-/**
- * @brief Ouvre progressivement la pince.
- */
 void OuvrirPince()
 {
-    for(int angle = 90; angle >= 20; angle--)
+    for(int angle = 55; angle <= 90; angle++)
     {
         SERVO_SetAngle(0, angle);
-        SERVO_SetAngle(1, 180 - angle);
+        //SERVO_SetAngle(1, 180 - angle);
 
-        delay(15);
+        delay(10);
     }
 }
 
-/**
- * @brief Ferme progressivement la pince.
- */
+
 void FermerPince()
 {
-    for(int angle = 20; angle <= 90; angle++)
+    for(int angle = 90; angle >= 55; angle--)
     {
         SERVO_SetAngle(0, angle);
-        SERVO_SetAngle(1, 180 - angle);
+        //SERVO_SetAngle(1, 180 - angle);
 
-        delay(15);
+        delay(10);
     }
 }
 
-/**
- * @brief Séquence de ramassage du verre.
- */
+
 void RamasserVerre()
 {
     // Ouvre la pince
@@ -60,34 +46,34 @@ void RamasserVerre()
     // Referme la pince sur le verre
     FermerPince();
 
-    verreRamasse = true;
+    VerreRamasse1 = true;
 
     delay(500);
-
 }
 
-/**
- * @brief Effectue un mouvement rapide vers l'avant pour renverser la quille.
- */
+
 void FaireTomberQuille()
 {
     // Rien pour l'instant
     // La quille sera probablement renversée par le déplacement du robot.
 }
 
-/**
- * @brief Dépose le verre à la fin du parcours.
- */
+
 void DeposerVerre()
 {
-    if(verreRamasse)
+    if(VerreRamasse1)
     {
         OuvrirPince();
 
         delay(500);
 
-        verreRamasse = false;
+        VerreRamasse1 = false;
     }
+}
+
+
+bool VerreRamasse(){
+    return VerreRamasse1;
 }
 
 

@@ -1,3 +1,19 @@
+/**
+ * ============================================================================
+ *  Robus Combattant — Compétition « Le rectangle »
+ * ============================================================================
+ *  @file    couleur_del.h
+ *  @brief   Détection de la couleur au sol
+ *
+ *  @details detection de la couleur du sol avec le Capteur TCS34725
+ *           allumage pendant 10 s de la DEL qui correspond à la broches 9 à 13 
+ *
+ *  @author  Francois
+ *  @date    2026-11-02
+ *  @version 1.0
+ * ============================================================================
+ */
+
 #ifndef COULEUR_DEL_H
 #define COULEUR_DEL_H
 
@@ -14,8 +30,12 @@ enum CouleurDetectee {
     AUCUNE_COULEUR
 };
 
-/** @brief Brochas des DEL, dans le même ordre que l'enum CouleurDetectee. */
-constexpr uint8_t BROCHES_LEDS[] = {9, 10, 11, 12, 13};
+
+
+CouleurDetectee CouleurActuelle();
+
+/** @brief Broches des DEL, dans le même ordre que l'enum CouleurDetectee. (RJOBV)*/
+constexpr uint8_t BROCHES_LEDS[] = {40, 41, 42, 43, 44};
 
 /** @brief Durée d'allumage d'une DEL en millisecondes. */
 constexpr unsigned long DUREE_DEL = 10000;
@@ -46,7 +66,7 @@ constexpr float SEUILS_MAX[5][3] = {
  *
  * @return bool true si le capteur est détecté, false sinon.
  */
-bool InitialiserCouleurDel();
+bool CouleurDelInit();
 
 /**
  * @brief Lit le capteur et retourne la couleur détectée.
@@ -81,5 +101,12 @@ void ActualiserDel();
  * @brief Éteint immédiatement toutes les DEL.
  */
 void EteindreDels();
+
+/**
+ * @brief Scan la couleur et écris la couleur trouver sur la variable CouleurActuelle,
+ *        Allume la led correspondant a la couleur
+ *        Éteind la led apres 10sec
+ */
+void SequenceDels();
 
 #endif

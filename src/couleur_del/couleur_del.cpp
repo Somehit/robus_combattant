@@ -1,5 +1,7 @@
 #include "couleur_del.h"
 
+CouleurDetectee CouleurActuelle1 = AUCUNE_COULEUR;
+
 static Adafruit_TCS34725 capteur(
     TCS34725_INTEGRATIONTIME_50MS,
     TCS34725_GAIN_4X
@@ -9,7 +11,7 @@ static bool capteurPret = false;
 static bool delActive = false;
 static unsigned long debutDEL = 0;
 
-bool InitialiserCouleurDel() {
+bool CouleurDelInit() {
     for (int i = 0; i < 5; i++) {
         pinMode(BROCHES_LEDS[i], OUTPUT);
         digitalWrite(BROCHES_LEDS[i], LOW);
@@ -66,4 +68,22 @@ void EteindreDels() {
         digitalWrite(BROCHES_LEDS[i], LOW);
     }
     delActive = false;
+    CouleurActuelle1 = AUCUNE_COULEUR;
+}
+
+
+void SequenceDels(){ //*********vérifier si vu que la fonction est dans loop, il ne faut pas qu'elle se fasse nonstop sinon débutDEL si réinitialise a chaque fois
+    
+    CouleurActuelle1 = LireCouleur();
+    
+    AllumerDel(CouleurActuelle1);
+
+    ActualiserDel();
+
+
+}
+
+
+CouleurDetectee CouleurActuelle() {
+    return CouleurActuelle1;
 }

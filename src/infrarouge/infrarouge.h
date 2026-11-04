@@ -1,17 +1,39 @@
-/*#ifndef INFRAROUGE
-#define INFRAROUGE
+#ifndef INFRAROUGE_H
+#define INFRAROUGE_H
 
-#include "config.h"
-#include <IRremote.hpp>
+#include <LibRobus.h> // inclut deja IRremote (ancienne API: IRsend)
 
-// Broche du recepteur infrarouge
-constexpr uint8_t IR_RECEIVER_PIN = 23;
+extern IRsend irsend; // sur Arduino Mega, la LED IR est forcement sur la broche 9 (timer 2)
 
-// Commande qui permet de reveiller le robot
-constexpr uint8_t COMMANDE_REVEIL = 0x10;
+// Broches
+const int BOUTON_START = 4;
+const int BOUTON_WAKE = 5;
 
-// Fonctions disponibles
-void InfrarougeInit();
-bool InfrarougeDetection();
+const int LED_ROUGE = 6;
+const int LED_VERTE = 7;
+
+const int LED_IR = 9;
+
+// Codes infrarouges
+const uint8_t ADRESSE_IR = 0x00;
+const uint8_t CODE_START = 0x10;
+const uint8_t CODE_WAKE = 0x20;
+
+// Gestion anti-rebond
+const unsigned long TEMPS_ANTI_REBOND = 50;
+
+struct Bouton {
+int broche;
+bool lecturePrecedente;
+bool etatStable;
+unsigned long dernierChangement;
+};
+
+extern Bouton start;
+extern Bouton wake;
+
+void envoyerCode(uint8_t code);
+bool appuiDetecte(Bouton &bouton);
+void setupInfrarouge();
 
 #endif
