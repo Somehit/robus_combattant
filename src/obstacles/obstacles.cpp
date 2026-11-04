@@ -125,7 +125,7 @@ void attendreSignalDepart()
 
 float obstacleDetecterADistance(float distanceM)
 {
-    if (SONAR_GetRange(0) <= distanceM)
+    if ((SONAR_GetRange(0)/100) <= distanceM)
     {
         return SONAR_GetRange(0);
     }
