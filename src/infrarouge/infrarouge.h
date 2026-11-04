@@ -1,6 +1,9 @@
+#ifndef INFRAROUGE_H
+#define INFRAROUGE_H
+
 #include <LibRobus.h> // inclut deja IRremote (ancienne API: IRsend)
 
-IRsend irsend; // sur Arduino Mega, la LED IR est forcement sur la broche 9 (timer 2)
+extern IRsend irsend; // sur Arduino Mega, la LED IR est forcement sur la broche 9 (timer 2)
 
 // Broches
 const int BOUTON_START = 4;
@@ -26,9 +29,11 @@ bool etatStable;
 unsigned long dernierChangement;
 };
 
-Bouton start = {BOUTON_START, LOW, LOW, 0};
-Bouton wake = {BOUTON_WAKE, LOW, LOW, 0};
+extern Bouton start;
+extern Bouton wake;
 
 void envoyerCode(uint8_t code);
 bool appuiDetecte(Bouton &bouton);
 void setupInfrarouge();
+
+#endif

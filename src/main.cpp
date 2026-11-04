@@ -21,6 +21,13 @@
 
 bool started = false;
 
+// safeguard pour ne pas répéter les commandes d'un if
+bool isRedFinished = false;
+bool isBlueFinished = false;
+bool isGreenFinished = false;
+bool isYellowFinished = false;
+bool isOrangeFinished = false;
+
 void setup() // setup tous les .h 
 {
     Serial.begin(9600); //meme valeur que dans monitor_speed dans le .ini
@@ -49,41 +56,46 @@ void loop()
         SUIVI_LIGNE_Execution(0.7);
 
         // Detection du mur (jaune)
-        if (CouleurActuelle() == JAUNE)
+        if (CouleurActuelle() == JAUNE && !isYellowFinished)
         {
             contournerMur();
+            isYellowFinished = true;
             return;
         }
 
         // Detection de la zone d'attente (bleu)
-        if (CouleurActuelle() == BLEU)
+        if (CouleurActuelle() == BLEU && !isBlueFinished)
         {
             attendreSignalDepart();//-------
+            isBlueFinished = true;
             return;
         }
 
         // rammasser le verre
-        if (CouleurActuelle() == ORANGE)
+        if (CouleurActuelle() == ORANGE && !isOrangeFinished)
         {
             //trouver_verre();//------
             RamasserVerre();
             //retour_ligne();//-------
+            isOrangeFinished = true;
             return;
         }
 
         // defoncer la quille
-        if (CouleurActuelle() == ROUGE)
+        if (CouleurActuelle() == ROUGE && !isRedFinished)
         {
             //trouver_quille();//-------
             FaireTomberQuille();//-----
             //retour_ligne();//---------
+            isRedFinished = true;
             return;
         }
 
         // passe dans le vide
-        if (CouleurActuelle() == VERT)
+        if (CouleurActuelle() == VERT && !isGreenFinished)
         {
             tout_droit();
+            isGreenFinished = true;
             return;
         }
     }

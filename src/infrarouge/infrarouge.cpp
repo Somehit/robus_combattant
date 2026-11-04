@@ -1,4 +1,8 @@
-#include <infrarouge/infrarouge.h>
+#include "infrarouge/infrarouge.h"
+
+IRsend irsend;
+Bouton start = {BOUTON_START, LOW, LOW, 0};
+Bouton wake = {BOUTON_WAKE, LOW, LOW, 0};
 
 void envoyerCode(uint8_t code) {
 digitalWrite(LED_VERTE, LOW); // LED verte allumée
