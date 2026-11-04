@@ -21,7 +21,6 @@ void OuvrirPince()
     }
 }
 
-
 void FermerPince()
 {
     for(int angle = 90; angle >= 55; angle--)

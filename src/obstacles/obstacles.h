@@ -19,7 +19,6 @@
 
 #include "config.h"
 #include "infrarouge/infrarouge.h"
-#include "config.h"
 #include "motor/motor.h"
 #include "couleur_del/couleur_del.h"
 #include "infrared/infrared.h"   // ou "infrared/infrared/infrared.h" selon ton dossier
@@ -41,7 +40,6 @@ void contournerMur();
 void attendreSignalDepart();
 
 // A FAIRE
-void stopMotors();
 //bool messageReveilRecul();
 
 
@@ -50,6 +48,13 @@ void stopMotors();
  * @brief Fait avancer le robot tout droit jusqu'à ce qu'il ne détecte plus d'obstacle.
  */
 void tout_droit();
+
+/**
+ * @brief Detecte un obstacle a une distance donnee
+ * @param distanceM La distance a la quelle detectee
+ * @return La distance de l'objet qui est toujours moins que distanceM, sinon -1
+ */
+float obstacleDetecterADistance(float distanceM);
 
 // Fin
 

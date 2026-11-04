@@ -20,9 +20,6 @@
 
 #include "config.h"
 
-
-
-
 /**
  * @brief Initialise les servomoteurs du mécanisme et ouvre les pinces
  */
@@ -66,7 +63,6 @@ void FaireTomberQuille();
  * @brief Sert à tester le mouvement des servomoteurs.
  */
 void ComprehensionServo();
-
 
 bool VerreRamasse();
 

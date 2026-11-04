@@ -30,8 +30,6 @@ enum CouleurDetectee {
     AUCUNE_COULEUR
 };
 
-
-
 CouleurDetectee CouleurActuelle();
 
 /** @brief Broches des DEL, dans le même ordre que l'enum CouleurDetectee. (RJOBV)*/
