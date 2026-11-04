@@ -1,37 +1,39 @@
 #include "mecanisme/mecanisme.h"
 
 bool VerreRamasse1 = false;
+bool PinceFerme;
 
 void MecanismeInit() //*******ajouter une position de base au pince??
 {
     SERVO_Enable(0); // J6
-    SERVO_SetAngle(0, 90); // Position initiale du servomoteur 0 (pince)
+    SERVO_SetAngle(0, 110); // Position initiale du servomoteur 0 (pince)
+    PinceFerme = false;
 
     delay(1000); //delay juste pour sassurer qu la pince est ouverte
 }
 
-void OuvrirPince()
-{
-    for(int angle = 55; angle <= 90; angle++)
-    {
-        SERVO_SetAngle(0, angle);
-        //SERVO_SetAngle(1, 180 - angle);
-
-        delay(10);
+void OuvrirPince() {
+  if (PinceFerme == true) {
+    for (int angle = 55; angle <= 110; angle++) {
+      SERVO_SetAngle(0, angle);
+      delay(msParDegree);
     }
+    PinceFerme = false;
+  }
+
+  return;
 }
 
-void FermerPince()
-{
-    for(int angle = 90; angle >= 55; angle--)
-    {
-        SERVO_SetAngle(0, angle);
-        //SERVO_SetAngle(1, 180 - angle);
-
-        delay(10);
+void FermerPince() {
+  if (PinceFerme == false) {
+    for (int angle = 110; angle >= 55; angle--) {
+      SERVO_SetAngle(0, angle);
+      delay(msParDegree);
     }
+    PinceFerme = true;
+  }
+  return;
 }
-
 
 void RamasserVerre()
 {
@@ -102,10 +104,7 @@ bool VerreRamasse(){
 void ComprehensionServo()
 {
     OuvrirPince();
-
     delay(2000);
-
     FermerPince();
-
     delay(2000);
 }

@@ -20,6 +20,10 @@
 
 #include "config.h"
 
+
+constexpr int msParDegree = 5;
+
+
 /**
  * @brief Initialise les servomoteurs du mécanisme et ouvre les pinces
  */
