@@ -100,7 +100,9 @@ float metersToCounts(float distanceMeters)
 
 void moveForward(float distanceMeters)
 {
-    float totalTargetCounts = metersToCounts(distanceMeters);
+    // Distance negative = reculer
+    const float direction = (distanceMeters < 0.0f) ? -1.0f : 1.0f;
+    float totalTargetCounts = metersToCounts(fabs(distanceMeters));
 
     // Definir le point ou le robot commence a ralentir
     float decelerationStartCounts = totalTargetCounts * DECELERATION_START_RATIO;
@@ -170,7 +172,7 @@ void moveForward(float distanceMeters)
 
             // Corriger la vitesse des roues
             adjustWheelPID(currentMotorSettings.pidKp, currentMotorSettings.pidKi, currentMotorSettings.maxPidCorrection,
-                           currentTargetSpeed, currentTargetSpeed,
+                           currentTargetSpeed * direction, currentTargetSpeed * direction,
                            leftSpeedTicks, rightSpeedTicks,
                            currentLeftCount, currentRightCount);
         }

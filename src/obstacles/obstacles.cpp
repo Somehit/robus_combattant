@@ -25,7 +25,7 @@ void devier_obstacle()
 // et ensuite avancer pendant 0.75
 void tout_droit()
 {
-    if (isObstacle()) // bon ici faudra changer pout que quand il detecte couleur (comme sa pour test)
+    if (LireCouleur() == VERT) // bon ici faudra changer pout que quand il detecte couleur (comme sa pour test)
     {
         int g = analogRead(PIN_CAPTEUR_GAUCHE);
         int c = analogRead(PIN_CAPTEUR_CENTRE);
@@ -80,25 +80,41 @@ void action_obstacle() // fonction qui execute fonction selon couleur detecter
 
 void contournerMur()
 {
-
+    // S'approcher du mur EN SUIVANT LA LIGNE pour arriver bien droit
     while (!isObstacle())
     {
-        moveForward(0.01f);
+        ActualiserDel();
+        SUIVI_LIGNE_Execution(MUR_VITESSE_APPROCHE);
     }
 
-    rotate(ROTATE_RIGHT);
+    stopMotors();
+    delay(100);
 
-    moveForward(0.30f);
+    // Contourner par la droite
+    rotate(ROTATE_RIGHT);
+    moveForward(MUR_DECALAGE_M + 0.5);
+
+    rotate(ROTATE_LEFT);
+    moveForward(MUR_LONGUEUR_M + 0.5);
 
     rotate(ROTATE_LEFT);
 
-    moveForward(0.50f);
+    // Revenir vers la ligne jusqu'a la voir (au lieu d'une distance fixe)
+    if (avancerJusquaLigne(MUR_DECALAGE_M + 0.20f))
+    {
+        // Les capteurs sont devant les roues: avancer pour que le centre
+        // de rotation soit sur la ligne avant de tourner
+        moveForward(DISTANCE_CAPTEURS_AXE_M);
+    }
 
-    rotate(ROTATE_LEFT);
+    // Tourner a droite en s'arretant ~30 degres avant, puis chercher la ligne
+    rotateDegrees(60);
 
-    moveForward(0.30f);
-
-    rotate(ROTATE_RIGHT);
+    if (!chercherLigne(ROTATE_RIGHT, 60))
+    {
+        chercherLigne(ROTATE_LEFT, 120);
+    }
+    // Au retour dans loop(), le suivi de ligne reprend
 }
 
 void attendreSignalDepart()
@@ -123,12 +139,62 @@ void attendreSignalDepart()
     }
 }
 
+// Une lecture du sonar en metres. Attend au moins SONAR_DELAI_PING_MS depuis
+// le ping precedent: sinon l'echo de l'ancien ping est lu comme un objet proche.
+static float lireSonarM()
+{
+    static unsigned long dernierPingMs = 0;
+
+    unsigned long ecoule = millis() - dernierPingMs;
+    if (ecoule < SONAR_DELAI_PING_MS)
+    {
+        delay(SONAR_DELAI_PING_MS - ecoule);
+    }
+
+    float distanceCm = SONAR_GetRange(SONAR_ID);
+    dernierPingMs = millis();
+
+    return distanceCm / 100.0f;
+}
+
 float obstacleDetecterADistance(float distanceM)
 {
-    if ((SONAR_GetRange(0)/100) <= distanceM)
+    float distanceLueM = lireSonarM();
+
+    // Sous SONAR_MIN_M (ou 0 = pas d'echo): lecture invalide
+    if (distanceLueM >= SONAR_MIN_M && distanceLueM <= distanceM)
     {
-        return SONAR_GetRange(0);
+        return distanceLueM;
     }
 
     return -1;
+}
+
+float confirmerObstacle(float distanceM)
+{
+    float somme = 0.0f;
+    float premiere = -1.0f;
+
+    for (uint8_t i = 0; i < SONAR_CONFIRMATIONS; i++)
+    {
+        float d = obstacleDetecterADistance(distanceM);
+
+        if (d < 0)
+        {
+            return -1; // une lecture sans objet: fausse detection
+        }
+
+        if (premiere < 0)
+        {
+            premiere = d;
+        }
+        else if (fabs(d - premiere) > SONAR_TOLERANCE_M)
+        {
+            return -1; // lectures incoherentes: fausse detection
+        }
+
+        somme += d;
+    }
+
+    return somme / SONAR_CONFIRMATIONS;
 }

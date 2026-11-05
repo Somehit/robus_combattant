@@ -65,6 +65,9 @@ constexpr MotorSettings MOTOR_SETTINGS_B = {
     .rotationTargetCounts = 2008,
 };
 
+// Reglages du robot actuel (A ou B), choisis dans MotorsInit()
+extern MotorSettings currentMotorSettings;
+
 /**
  * Remet les encodeurs a zero, arrete les moteurs et choisit les
  * reglages (A ou B) selon la broche d'identification du robot.
@@ -75,9 +78,14 @@ void MotorsInit();
  * Avance en ligne droite avec acceleration, correction PID et deceleration.
  * Bloque jusqu'a ce que la distance soit parcourue ou qu'un obstacle soit detecte.
  *
- * @param distanceMeters Distance a parcourir en metres
+ * @param distanceMeters Distance a parcourir en metres (negative = reculer)
  */
 void moveForward(float distanceMeters);
+
+/**
+ * Convertit une distance en metres vers des impulsions d'encodeur.
+ */
+float metersToCounts(float distanceMeters);
 
 /**
  * @brief Arrete les 2 moteurs

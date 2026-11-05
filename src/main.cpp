@@ -1,15 +1,3 @@
-/**
- * ============================================================================
- *  Robus Combattant — Compétition « Le rectangle »
- * ============================================================================
- *  @file    main.cpp
- *  @brief   logique global du code
- *  @details ce qu'il reste: compléter la logique du main
- *  @author  tlm
- *  @date    2026-11-02
- *  @version 1.0
- * ============================================================================
- */
 
 #include "config.h"
 #include "motor/motor.h"
@@ -18,119 +6,128 @@
 #include "suivi_ligne/suivi_ligne.h"
 #include "obstacles/obstacles.h"
 #include "infrarouge/infrarouge.h"
+#include "infrared/infrared.h"
+#include <Adafruit_TCS34725.h>
 
 bool started = false;
 
-// safeguard pour ne pas répéter les commandes d'un if
+// Eviter de repeter les commandes
 bool isRedFinished = false;
 bool isBlueFinished = false;
 bool isGreenFinished = false;
 bool isYellowFinished = false;
 bool isOrangeFinished = false;
 
-void setup() // setup tous les .h
+void setup()
 {
-    Serial.begin(9600); // meme valeur que dans monitor_speed dans le .ini
-    
-    BoardInit();        // LibRobus
-    setupInfrarouge();
-    CouleurDelInit(); // Pins 40, 41, 42, 43, 44 en output et set a LOW
-    InfraredInit();   // Broches IR 48/49
-    MotorsInit();     // encodeurs à 0, moteurs arretés, choix du robot
-    MecanismeInit();  // Servomoteurs 0 et 1
-    SuiviLigneInit(); // Pins A0, A1, A2 en entrée
+    Serial.begin(9600);
+
+    BoardInit();
+    // Pas de setupInfrarouge() sur le robot: ses broches (4 et 7) sont celles
+    // des servos 0 et 1. Elle sert seulement au code de la telecommande.
+    CouleurDelInit();
+    InfraredInit();
+    MotorsInit();
+    MecanismeInit();
+    SuiviLigneInit();
 }
 
 void loop()
 {
-    // logique pour commencer
-    if (ROBUS_IsBumper(3) || appuiDetecte(start))
+    // Actualiser les LEDs en tout temps
+    ActualiserDel();
+
+    if ((ROBUS_IsBumper(3) || (signalReceived())) && !started)
     {
-        if (started)
-            started = false;
         started = true;
+        
+        AX_BuzzerON();
+        delay(1000);
+        AX_BuzzerOFF();
+        delay(500);
+        AX_BuzzerON();
+        delay(1000);
+        AX_BuzzerOFF();
     }
 
-    // LOGIQUE une fois commencé
-    if (started)
+    if (!started)
     {
-        // start();//---------
-        LireCouleur();
-        ActualiserDel();
-        SUIVI_LIGNE_Execution(0.7);
-
-        // Detection du mur (jaune)
-        if (CouleurActuelle() == JAUNE && !isYellowFinished)
-        {
-            contournerMur();
-            isYellowFinished = true;
-            return;
-        }
-
-        // Detection de la zone d'attente (bleu)
-        if (CouleurActuelle() == BLEU && !isBlueFinished)
-        {
-            attendreSignalDepart(); //-------
-            isBlueFinished = true;
-            return;
-        }
-
-        // rammasser le verre
-        if (CouleurActuelle() == ORANGE && !isOrangeFinished)
-        {
-            // trouver_verre();//------
-            RamasserVerre();
-            // retour_ligne();//-------
-            isOrangeFinished = true;
-            return;
-        }
-
-        // defoncer la quille
-        if (CouleurActuelle() == ROUGE && !isRedFinished)
-        {
-            // Remettre les encodeurs a zero avant de tourner
-            ENCODER_ReadReset(LEFT);
-            ENCODER_ReadReset(RIGHT);
-
-            // Tourner jusqu'a detecter un obstacle
-            while (obstacleDetecterADistance(0.5f) == -1)
-            {
-                MOTOR_SetSpeed(LEFT, 0.4);
-                MOTOR_SetSpeed(RIGHT, -0.4);
-            }
-
-            stopMotors();
-
-            // Sauvegarder la rotation effectuee moyenne
-            int32_t rotationCounts = (abs(ENCODER_Read(LEFT)) + abs(ENCODER_Read(RIGHT))) / 2;
-
-            // Calculer la distance pour avancer
-            float distanceAvancer = obstacleDetecterADistance(0.5f) + 0.3f;
-            moveForward(distanceAvancer);
-
-            // Revenir en arriere
-            rotate(ROTATE_LEFT);
-            rotate(ROTATE_LEFT);
-
-            moveForward(distanceAvancer);
-
-            rotate(ROTATE_LEFT);
-            rotate(ROTATE_LEFT);
-
-            // Revenir a l'orientation initiale
-            rotateCounts(ROTATE_LEFT, rotationCounts);
-
-            isRedFinished = true;
-            return;
-        }
-
-        // passe dans le vide
-        if (CouleurActuelle() == VERT && !isGreenFinished)
-        {
-            tout_droit();
-            isGreenFinished = true;
-            return;
-        }
+        return;
     }
-    return;
+
+    // Detection de couleur
+    CouleurDetectee couleur = LireCouleur();
+
+    // Suivi de ligne
+    SUIVI_LIGNE_Execution(0.45);
+
+    // Detection du mur (jaune)
+    if (couleur == JAUNE && !isYellowFinished)
+    {
+        contournerMur();
+        isYellowFinished = true;
+        return;
+    }
+
+    // Detection de la zone d'attente (bleu)
+    if (couleur == BLEU && !isBlueFinished)
+    {
+        MOTOR_SetSpeed(LEFT, 0);
+        MOTOR_SetSpeed(RIGHT, 0);
+
+        while (!signalReceived())
+        {
+        }
+
+        AX_BuzzerON();
+        delay(1000);
+        AX_BuzzerOFF();
+        delay(500);
+        AX_BuzzerON();
+        delay(1000);
+        AX_BuzzerOFF();
+        delay(500);
+        AX_BuzzerON();
+        delay(1000);
+        AX_BuzzerOFF();
+
+        isBlueFinished = true;
+        return;
+    }
+
+    // Ramasser le verre (orange)
+    if (couleur == ORANGE && !isOrangeFinished)
+    {
+        isOrangeFinished = true;
+        RecupererVerre();
+        return;
+    }
+
+    // Deposer le verre a la fin du parcours
+    // TODO: remplacer finDuParcours par la vraie condition de fin
+    // if (VerreRamasse() && finDuParcours)
+    // {
+    //     stopMotors();
+    //     DeposerVerre();
+    // }
+
+    // Defoncer la quille (rouge)
+    if (couleur == ROUGE && !isRedFinished)
+    {
+        isRedFinished = true;
+        FaireTomberQuille();
+        return;
+    }
+
+    // Passage dans le vide (vert)
+    if (couleur == VERT && !isGreenFinished)
+    {
+        tout_droit();
+        isGreenFinished = true;
+        return;
+    }
+    if(isRedFinished && isOrangeFinished && isGreenFinished && isBlueFinished && isYellowFinished){
+        stopMotors();
+        OuvrirPince();
+    }
 }

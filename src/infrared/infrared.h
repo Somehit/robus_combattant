@@ -31,6 +31,8 @@ void InfraredInit();
  *
  * @return true si au moins un des deux capteurs detecte un obstacle
  */
+bool signalReceived();
+
 bool isObstacle();
 
 #endif

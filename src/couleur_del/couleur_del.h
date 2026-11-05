@@ -1,12 +1,16 @@
+
 /**
  * ============================================================================
  *  Robus Combattant — Compétition « Le rectangle »
  * ============================================================================
  *  @file    couleur_del.h
- *  @brief   Détection de la couleur au sol
+ *  @brief   Détection de couleur et gestion des DEL
  *
- *  @details detection de la couleur du sol avec le Capteur TCS34725
- *           allumage pendant 10 s de la DEL qui correspond à la broches 9 à 13 
+ *  @details Détection des couleurs avec le capteur TCS34725.
+ *           Utilise les proportions RGB normalisées pour reconnaître
+ *           les couleurs indépendamment de la luminosité.
+ *           Chaque DEL reste allumée pendant 1 seconde.
+ *           Plusieurs DEL peuvent être allumées simultanément.
  *
  *  @author  Francois
  *  @date    2026-11-02
@@ -20,7 +24,9 @@
 #include "config.h"
 #include <Adafruit_TCS34725.h>
 
-/** @brief Couleurs reconnaissables par le capteur (l'ordre correspond à BROCHES_LEDS). */
+#define DUREE_DEL 10000UL
+
+/** @brief Couleurs reconnaissables par le capteur. */
 enum CouleurDetectee {
     ROUGE,
     JAUNE,
@@ -30,68 +36,67 @@ enum CouleurDetectee {
     AUCUNE_COULEUR
 };
 
-CouleurDetectee CouleurActuelle();
+const float centres[5][3] = {
+        {42.2, 29.4, 28.3}, // Rouge (rose)
+        {37.1, 39.7, 23.2}, // Jaune
+        {43.0, 33.7, 23.3}, // Orange
+        {20.2, 37.3, 42.5}, // Bleu
+        {27.0, 38.4, 34.6}  // Vert
+    };
 
-/** @brief Broches des DEL, dans le même ordre que l'enum CouleurDetectee. (RJOBV)*/
+/**
+ * @brief Distance max (au carre) acceptee pour chaque couleur, meme ordre que l'enum.
+ * Rouge/jaune/orange sont proches entre eux: on garde 25.
+ * Le bleu est loin du blanc et des couleurs chaudes, mais sombre donc plus
+ * sensible a l'eclairage: on lui laisse plus de marge.
+ */
+const float DISTANCE_MAX[5] = {25, 25, 25, 60, 25};
+
+/**
+ * @brief La meilleure couleur doit etre au moins ce facteur (au carre) plus proche
+ * que la deuxieme, sinon la lecture est ambigue (ex: entre bleu et vert).
+ */
+constexpr float MARGE_AMBIGUITE = 2.0f;
+
+// Mettre a 1 pour afficher les proportions lues dans le moniteur serie
+#define DEBUG_COULEUR 1
+
+/** @brief Broches des DEL dans le même ordre que l'enum. */
 constexpr uint8_t BROCHES_LEDS[] = {40, 41, 42, 43, 44};
-
-/** @brief Durée d'allumage d'une DEL en millisecondes. */
-constexpr unsigned long DUREE_DEL = 10000;
-
-/** @brief Seuils RGB minimums par couleur {R, G, B}. */
-constexpr float SEUILS_MIN[5][3] = {
-    {130, 65, 45}, // Rouge/Rose
-    {110, 85, 35}, // Jaune
-    {130, 70, 35}, // Orange
-    {62, 90, 75},  // Bleu
-    {80, 90, 55}   // Vert
-};
-
-/** @brief Seuils RGB maximums par couleur {R, G, B}. */
-constexpr float SEUILS_MAX[5][3] = {
-    {140, 75, 55},   // Rouge/Rose
-    {120, 95, 45},   // Jaune
-    {140, 80, 45},   // Orange
-    {72, 100, 85},   // Bleu
-    {90, 100, 65}    // Vert
-};
 
 /**
  * @brief Initialise le capteur TCS34725 et les broches des DEL.
  *
- * Configure les 5 DEL en sortie (éteintes) et démarre la communication I2C.
- * À appeler une seule fois dans setup().
+ * Configure les 5 DEL en sortie et démarre la communication I2C.
  *
- * @return bool true si le capteur est détecté, false sinon.
+ * @return true si le capteur est détecté, false sinon.
  */
 bool CouleurDelInit();
 
 /**
  * @brief Lit le capteur et retourne la couleur détectée.
  *
- * Compare les valeurs R, G, B mesurées aux seuils SEUILS_MIN / SEUILS_MAX.
- * Cette fonction est bloquante pendant le temps d'intégration du capteur (~50 ms).
- * Elle n'allume aucune DEL.
+ * Utilise les proportions RGB normalisées pour identifier la couleur.
+ * Allume automatiquement la DEL correspondante.
  *
- * @return CouleurDetectee La couleur reconnue, ou AUCUNE_COULEUR si aucune
- *         couleur (ou plusieurs à la fois) ne correspond, ou si le capteur est absent.
+ * @return Couleur détectée ou AUCUNE_COULEUR.
  */
 CouleurDetectee LireCouleur();
 
 /**
- * @brief Allume la DEL associée à une couleur pendant DUREE_DEL.
+ * @brief Allume la DEL associée à une couleur pendant 1 seconde.
  *
- * Ne fait rien si la couleur est AUCUNE_COULEUR ou si une DEL est déjà allumée
- * (elle doit d'abord s'éteindre). L'extinction est gérée par ActualiserDel().
+ * Chaque DEL possède son propre chronomètre.
+ * Si la DEL est déjà allumée, son chronomètre n'est pas réinitialisé.
  *
  * @param couleur Couleur dont on veut allumer la DEL.
  */
 void AllumerDel(CouleurDetectee couleur);
 
 /**
- * @brief Éteint la DEL une fois DUREE_DEL écoulée (non bloquant).
+ * @brief Éteint individuellement les DEL dont le délai est écoulé.
  *
- * À appeler à chaque tour de loop().
+ * Fonction non bloquante à appeler régulièrement dans loop().
  */
 void ActualiserDel();
 
@@ -99,10 +104,5 @@ void ActualiserDel();
  * @brief Éteint immédiatement toutes les DEL.
  */
 void EteindreDels();
-
-/**
- * @brief Donne la couleur actuelle.
- */
-CouleurDetectee CouleurActuelle();
 
 #endif
