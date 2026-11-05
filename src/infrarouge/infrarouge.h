@@ -48,7 +48,9 @@ bool recevoirCode(uint8_t &code);
  * @brief Arrete le robot et attend de recevoir un code IR precis.
  */
 void attendreCode(uint8_t codeAttendu);
+
 bool appuiDetecte(Bouton &bouton);
+
 void setupInfrarouge();
 
 #endif

@@ -9,6 +9,20 @@
 #include "infrared/infrared.h"
 #include <Adafruit_TCS34725.h>
 
+
+/**
+ * @brief Effectu un nombre de beep
+ * @param count Nombre de beep a effectué
+ */
+void beep(int count){
+  for(int i=0;i<count;i++){
+    AX_BuzzerON();
+    delay(1000);
+    AX_BuzzerOFF();
+    delay(500);
+  }
+}
+
 bool started = false;
 
 // Eviter de repeter les commandes
@@ -41,13 +55,14 @@ void loop()
     {
         started = true;
         
-        AX_BuzzerON();
+        beep(2);
+/*      AX_BuzzerON();
         delay(1000);
         AX_BuzzerOFF();
         delay(500);
         AX_BuzzerON();
         delay(1000);
-        AX_BuzzerOFF();
+        AX_BuzzerOFF(); */
     }
 
     if (!started)
@@ -79,7 +94,8 @@ void loop()
         {
         }
 
-        AX_BuzzerON();
+        beep(3);
+/*      AX_BuzzerON();
         delay(1000);
         AX_BuzzerOFF();
         delay(500);
@@ -89,7 +105,7 @@ void loop()
         delay(500);
         AX_BuzzerON();
         delay(1000);
-        AX_BuzzerOFF();
+        AX_BuzzerOFF(); */
 
         isBlueFinished = true;
         return;
