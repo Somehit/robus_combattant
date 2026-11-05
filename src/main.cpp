@@ -54,7 +54,6 @@ void loop()
     if ((ROBUS_IsBumper(3) || (signalReceived())) && !started)
     {
         started = true;
-        
         beep(2);
 /*      AX_BuzzerON();
         delay(1000);
@@ -127,7 +126,7 @@ void loop()
     //     DeposerVerre();
     // }
 
-    // Defoncer la quille (rouge)
+    // Défoncer la quille (rouge)
     if (couleur == ROUGE && !isRedFinished)
     {
         isRedFinished = true;
@@ -142,8 +141,9 @@ void loop()
         isGreenFinished = true;
         return;
     }
+
     if(isRedFinished && isOrangeFinished && isGreenFinished && isBlueFinished && isYellowFinished){
         stopMotors();
-        OuvrirPince();
+        DeposerVerre();
     }
 }

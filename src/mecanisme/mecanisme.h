@@ -46,10 +46,6 @@ void OuvrirPince();
  */
 void FermerPince();
 
-/**
- * @brief Ramasse le verre.
- */
-void RamasserVerre();
 
 /**
  * @brief Dépose le verre.

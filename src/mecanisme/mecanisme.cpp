@@ -4,15 +4,17 @@
 #include "couleur_del/couleur_del.h"
 #include "suivi_ligne/suivi_ligne.h"
 
-bool VerreRamasse1 = false;
+bool VerreRamasse1;
 bool PinceFerme;
 
-void MecanismeInit() //*******ajouter une position de base au pince??
+void MecanismeInit()
 {
     SERVO_Enable(0); // J6 (broche 4)
     SERVO_Disable(1); // servo 1 (broche 7) pas utilise: arreter ses impulsions
     SERVO_SetAngle(0, 110); // Position initiale du servomoteur 0 (pince)
+    VerreRamasse1 = false;
     PinceFerme = false;
+
 
     delay(1000); //delay juste pour sassurer qu la pince est ouverte
 }
@@ -40,22 +42,7 @@ void FermerPince() {
   return;
 }
 
-void RamasserVerre()
-{
-    // Ouvre la pince
-    OuvrirPince();
 
-    delay(500);
-
-    // Le robot devrait être positionné devant le verre
-
-    // Referme la pince sur le verre
-    FermerPince();
-
-    VerreRamasse1 = true;
-
-    delay(500);
-}
 
 
 // Tourne vers la droite jusqu'a trouver un objet (quille ou verre) au sonar.
@@ -165,6 +152,7 @@ void RecupererVerre()
     
         moveForward(distanceAvancer);
         FermerPince();
+        VerreRamasse1 = true;
 
         // Reculer de la meme distance: pas de demi-tours, donc pas
         // d'erreur de rotation accumulee, on revient pile au depart
@@ -182,9 +170,7 @@ void DeposerVerre()
     if(VerreRamasse1)
     {
         OuvrirPince();
-
-        delay(500);
-
+        delay(250);
         VerreRamasse1 = false;
     }
 }
@@ -195,13 +181,6 @@ bool VerreRamasse(){
 }
 
 
-/* RamasserVerre();
-
-    while(true)
-    {
-
-    }
-*/
 
 /*void loop()
 {

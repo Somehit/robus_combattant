@@ -1,10 +1,5 @@
 #include "obstacles/obstacles.h"
 
-// fonction de couleur_del
-int color()
-{
-    return 1;
-}
 
 // detecte mur fait un 90 , avance,... pour contourner
 void devier_obstacle()
@@ -62,19 +57,6 @@ void tout_droit()
         {
             SUIVI_LIGNE_Execution(1.0);
         }
-    }
-}
-
-void action_obstacle() // fonction qui execute fonction selon couleur detecter
-{
-    int color1 = color();
-    if (color1 == 0)
-    {
-        devier_obstacle();
-    }
-    if (color1 == 1)
-    {
-        tout_droit();
     }
 }
 

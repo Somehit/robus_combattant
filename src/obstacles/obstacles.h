@@ -24,10 +24,6 @@
 #include "infrared/infrared.h"   // ou "infrared/infrared/infrared.h" selon ton dossier
 #include "suivi_ligne/suivi_ligne.h"
 
-/**
- * @brief choisit l'action selon couleur
- */
-void action_obstacle();
 
 // --- CONTOURNEMENT DU MUR (jaune) ---
 constexpr float MUR_VITESSE_APPROCHE = 0.40f; // facteur du suivi de ligne vers le mur
