@@ -59,7 +59,7 @@ void loop()
     CouleurDetectee couleur = LireCouleur();
 
     // Suivi de ligne
-    SUIVI_LIGNE_Execution(0.45);
+    SUIVI_LIGNE_Execution(0.60);
 
     // Detection du mur (jaune)
     if (couleur == JAUNE && !isYellowFinished)
@@ -126,6 +126,7 @@ void loop()
         isGreenFinished = true;
         return;
     }
+
     if(isRedFinished && isOrangeFinished && isGreenFinished && isBlueFinished && isYellowFinished){
         stopMotors();
         OuvrirPince();

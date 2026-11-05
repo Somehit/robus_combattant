@@ -92,10 +92,10 @@ void contournerMur()
 
     // Contourner par la droite
     rotate(ROTATE_RIGHT);
-    moveForward(MUR_DECALAGE_M + 0.5);
+    moveForward(MUR_DECALAGE_M + 0.05);
 
     rotate(ROTATE_LEFT);
-    moveForward(MUR_LONGUEUR_M + 0.5);
+    moveForward(MUR_LONGUEUR_M + 0.05);
 
     rotate(ROTATE_LEFT);
 
@@ -197,4 +197,86 @@ float confirmerObstacle(float distanceM)
     }
 
     return somme / SONAR_CONFIRMATIONS;
+}
+
+bool chercherLigne(RotationDirection direction, float maxDegres)
+{
+    ENCODER_ReadReset(LEFT);
+    ENCODER_ReadReset(RIGHT);
+
+    const int32_t maxCounts = (int32_t)(currentMotorSettings.rotationTargetCounts * (maxDegres / 90.0f));
+    const float sens = (direction == ROTATE_LEFT) ? -1.0f : 1.0f;
+    const unsigned long debut = millis();
+    uint8_t confirmations = 0;
+
+    while (millis() - debut < TIMEOUT_RECHERCHE_MS)
+    {
+        // Exiger quelques lectures de suite pour ignorer le bruit
+        if (analogRead(PIN_CAPTEUR_CENTRE) > SEUIL_C)
+        {
+            if (++confirmations >= CONFIRMATIONS_LIGNE)
+            {
+                stopMotors();
+                return true;
+            }
+        }
+        else
+        {
+            confirmations = 0;
+        }
+
+        int32_t counts = (abs(ENCODER_Read(LEFT)) + abs(ENCODER_Read(RIGHT))) / 2;
+        if (counts >= maxCounts)
+        {
+            break;
+        }
+
+        MOTOR_SetSpeed(LEFT, sens * VITESSE_RECHERCHE_LIGNE);
+        MOTOR_SetSpeed(RIGHT, -sens * VITESSE_RECHERCHE_LIGNE);
+    }
+
+    stopMotors();
+    return false;
+}
+
+bool avancerJusquaLigne(float distanceMaxM)
+{
+    ENCODER_ReadReset(LEFT);
+    ENCODER_ReadReset(RIGHT);
+
+    const float maxCounts = metersToCounts(distanceMaxM);
+    const unsigned long debut = millis();
+    uint8_t confirmations = 0;
+
+    while (millis() - debut < TIMEOUT_RECHERCHE_MS)
+    {
+        bool ligne = analogRead(PIN_CAPTEUR_GAUCHE) > SEUIL_G ||
+                     analogRead(PIN_CAPTEUR_CENTRE) > SEUIL_C ||
+                     analogRead(PIN_CAPTEUR_DROITE) > SEUIL_D;
+
+        if (ligne)
+        {
+            if (++confirmations >= CONFIRMATIONS_LIGNE)
+            {
+                stopMotors();
+                return true;
+            }
+        }
+        else
+        {
+            confirmations = 0;
+        }
+
+        float counts = (abs(ENCODER_Read(LEFT)) + abs(ENCODER_Read(RIGHT))) / 2.0f;
+        if (counts >= maxCounts)
+        {
+            break;
+        }
+
+        MOTOR_SetSpeed(LEFT, VITESSE_APPROCHE_LIGNE);
+        MOTOR_SetSpeed(RIGHT, VITESSE_APPROCHE_LIGNE);
+    }
+
+    stopMotors();
+    return false;
 }

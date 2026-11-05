@@ -164,7 +164,7 @@ void RecupererVerre()
 
     
         moveForward(distanceAvancer);
-        FermerPince();
+        // FermerPince();
 
         // Reculer de la meme distance: pas de demi-tours, donc pas
         // d'erreur de rotation accumulee, on revient pile au depart
@@ -172,8 +172,6 @@ void RecupererVerre()
     }
 
     revenirSurLigne(rotationCounts);
-
-     moveForward(0.3);
 
 }
 

@@ -74,6 +74,28 @@ constexpr float SONAR_TOLERANCE_M = 0.05f;        // ecart max entre les lecture
  */
 float confirmerObstacle(float distanceM);
 
+// --- RECHERCHE DE LIGNE (apres une manoeuvre) ---
+constexpr float VITESSE_RECHERCHE_LIGNE = 0.20f;      // rotation sur place (MIN_SPEED est trop faible)
+constexpr float VITESSE_APPROCHE_LIGNE = 0.25f;       // avance lente vers la ligne
+constexpr unsigned long TIMEOUT_RECHERCHE_MS = 4000;  // securite: ne jamais bloquer
+constexpr uint8_t CONFIRMATIONS_LIGNE = 2;            // lectures consecutives requises
+constexpr float DISTANCE_CAPTEURS_AXE_M = 0.08f;      // A MESURER: capteurs de ligne -> axe des roues
+
+/**
+ * @brief Tourne sur place jusqu'a ce que le capteur du centre voie la ligne.
+ * @param direction Sens de rotation
+ * @param maxDegres Angle maximal a balayer
+ * @return true si la ligne a ete trouvee
+ */
+bool chercherLigne(RotationDirection direction, float maxDegres);
+
+/**
+ * @brief Avance lentement jusqu'a ce qu'un des capteurs voie la ligne.
+ * @param distanceMaxM Distance maximale a parcourir
+ * @return true si la ligne a ete trouvee
+ */
+bool avancerJusquaLigne(float distanceMaxM);
+
 // Fin
 
 #endif
